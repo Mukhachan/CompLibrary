@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href ="{{ url_for('static', filename='styles.css' )}}" type="text/css" >
+    
+    {% block title -%}
+    {% if title %}
+        <title>{{title}}</title>
+    {% else %}
+        <title>Library 1324</title>
+    {% endif %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="login"><a href="auth">Авторизация</a></div>
+    <nav>
+        {% block content -%}
+            {%- block menu_main -%}
+        <ul class="menu-main" >
+            {% for m in menu %}
+            <li><a href="{{m.url}}" class="current">{{m.title}}</a></li>
+            {% endfor %}
+            
+        </ul>
+            {% endblock menu_main -%}
+    </nav>
+    <div class="clear"></div> 
+    <div class="content">
+        {% if title -%}
+    <h1 class="title">{{title}}</h1>
+        {% else -%}
+    <h1 class="title">Library 1324</h1>
+        {% endif %}
+
+        {% endblock -%}
+    </div>
+</body>
+</html>

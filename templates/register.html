@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href ="{{ url_for('static', filename='register.css' )}}" type="text/css" >
+    <title>Authentification</title>
+</head>
+<body>
+    <div class="registration-cssave">
+        <form action="/auth" method="post">
+            <h3 class="text-center">Форма регистрации</h3>
+            <div class="form-group">
+                <input class="form-control item" type="text" name="username" minlength="10" maxlength="10" placeholder="Номер карты" required>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control item" type="email" name="username" id="username" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <input class="form-control item" type="password" name="Пароль" minlength="6" maxlength="14" id="password" placeholder="Пароль" required>
+            </div>
+
+            <div class="form-group">
+                <center><button class="btn-create-account" type="submit">Регистрация</button></center>
+            
+                <center><a onclick="history.back();" class="history_back">Назад</a></center>
+            </div>
+        </form>
+    </div>
+</body>

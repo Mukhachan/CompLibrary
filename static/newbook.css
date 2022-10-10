@@ -1,0 +1,74 @@
+html{
+    background-color:#b04f22;
+    background-blend-mode:overlay;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    height:100%;    
+  }
+   body {
+    background-color:transparent;
+  }
+
+  .form{
+    padding:50px 0;
+  }
+
+  .form form{
+    max-width:800px;
+    padding:50px 70px;
+    border-radius:10px;
+    box-shadow:4px 4px 10px rgba(0, 0, 0, 0.2);
+    background-color:#fff;
+  }
+  .form h3{
+    margin-bottom:30px;
+  }
+  .btn-add{
+    margin-top: 10pt;    
+    margin-left: 27%;
+    background: #3f93ff;
+    padding: 3%;
+    border-radius: 6px;
+    box-shadow: 2px 2px 3px black;
+    user-select: none;}
+   .btn-add:hover{
+    box-shadow: 2px 2px 7px black;
+    background: #4191fa;
+   }
+   .book_author{
+    margin-bottom: 6px;
+   }
+   .book_name{
+    margin-bottom: 6px;
+   }
+   .book_year{
+    margin-bottom: 6px;
+   }
+   .book_description{
+    margin-top: 6px;
+    margin-bottom: 6px;
+    
+  }
+   textarea {
+    font-size: 11pt;
+    resize: none;
+    
+   }
+   .back{
+    margin-top: 10px;
+    margin-right: 3px;
+   }
+   .history_back{
+
+    text-decoration: none;
+    background: none;
+    user-select: none;
+  }
+  .history_back:hover{
+    text-decoration: underline;
+    background-color: rgba(128, 128, 128, 0.47); 
+    
+  }

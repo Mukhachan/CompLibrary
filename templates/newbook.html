@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href ="{{ url_for('static', filename='newbook.css' )}}" type="text/css" >
+    <title>{{title}}</title>
+</head>
+<body>
+    <div class="form">
+        <form action="/newbook" method="post">
+            <h3>Добавление книги</h3>
+            <div class="book_name">
+                <input type="text" id="name" placeholder="Название книги">
+            </div>
+
+            <div class="book_author">
+                <input type="text" placeholder="Автор">
+            </div>            
+            <div class="book_year">
+                <input type="year" id="year"  placeholder="Год выпуска" >
+            </div>
+            <div class="book_count">
+                <input type="text" id="count" placeholder="Количество">
+            </div>
+            <div >
+                <textarea class="book_description" cols="18" rows="3" placeholder="Описание" ></textarea>
+            </div>
+
+            <div class="create_btn">
+                <button class="btn-add" type="submit">Добавить</button>
+            </div>
+            <div class="back">
+                <center><a class="history_back" onclick="history.back()">Назад</a></center>
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>
