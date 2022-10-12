@@ -12,7 +12,7 @@
     <div class="form">
         {% for cat, msg in get_flashed_messages(True) %}
         <div class="flash {{cat}}" style="text-align: center; 
-                                    font-size: 14pt; background: greenyellow;
+                                    font-size: 14pt; background: rgb(164, 164, 164);
                                     border-radius:10px">{{msg}}</div>
         {% endfor %}
         <form action="/newbook" method="post">
