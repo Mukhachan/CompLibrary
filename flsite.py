@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from flask import Flask, render_template, request, g , redirect, url_for
+from flask import Flask, render_template, request, g , redirect, url_for, flash
 from FDataBase import FDataBase
 
 DATABASE = '/tmp/flsite.db'
@@ -8,6 +8,7 @@ DEBUG = True
 SECRET_KEY = 'ToRa#UCLp1EBPmK6p25W'
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY  
 app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
@@ -87,9 +88,23 @@ def PageNotFound(error):
 #  Добавление книги  #
 @app.route('/newbook', methods=["POST", "GET"])
 def newbook():
+    db = get_db()
+    dbase = FDataBase(db)
+
     if request.method == 'POST':
         print(request.form)
-    
+        if len(request.form['title']) != 0 and len(request.form['descript']) !=0:
+            res = dbase.newbook(request.form['title'], request.form['author'],
+                                 request.form['year'], request.form['number'], 
+                                 request.form['descript'], )
+            if not res:
+                flash('Ошибка добавления книги', category = 'error')
+            else:
+                flash('Книга добавлена', category = 'success')
+            
+        else:
+            flash('Ошибка добавления книги', category = 'error')
+
     return render_template('newbook.html', css_link= 'newbook.css', title='Newbook')
 
 

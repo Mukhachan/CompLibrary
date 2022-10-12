@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,24 +8,30 @@
     <title>{{title}}</title>
 </head>
 <body>
+
     <div class="form">
+        {% for cat, msg in get_flashed_messages(True) %}
+        <div class="flash {{cat}}" style="text-align: center; 
+                                    font-size: 14pt; background: greenyellow;
+                                    border-radius:10px">{{msg}}</div>
+        {% endfor %}
         <form action="/newbook" method="post">
             <h3>Добавление книги</h3>
             <div class="book_name">
-                <input type="text" id="name" placeholder="Название книги">
+                <input name="title" type="text" id="name" placeholder="Название книги">
             </div>
 
             <div class="book_author">
-                <input type="text" placeholder="Автор">
+                <input name="author" type="text" placeholder="Автор">
             </div>            
             <div class="book_year">
-                <input type="year" id="year"  placeholder="Год выпуска" >
+                <input name="year" type="year" id="year"  placeholder="Год выпуска" >
             </div>
             <div class="book_count">
-                <input type="text" id="count" placeholder="Количество">
+                <input name="number" type="text" id="count" placeholder="Количество">
             </div>
             <div >
-                <textarea class="book_description" cols="18" rows="3" placeholder="Описание" ></textarea>
+                <textarea name="descript"  class="book_description" cols="18" rows="3" placeholder="Описание" ></textarea>
             </div>
 
             <div class="create_btn">
