@@ -1,6 +1,5 @@
 import sqlite3
-import time
-import math
+import datetime
 
 
 class FDataBase:
@@ -19,8 +18,9 @@ class FDataBase:
         return []
     def newbook(self, title, author, year, number, descript):
         try:
-            tm = math.floor(time.time())
-            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?)", (title, author, year, number, descript, tm))
+            dt = datetime.datetime.now()
+            dt_string = dt.strftime("Date: %d/%m/%Y  time: %H:%M:%S")
+            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?)", (title, author, year, number, descript, dt_string))
             self.__db.commit()
         except sqlite3.Error as e:
             print("Ошибка добавления книги в БД: "+ str(e))

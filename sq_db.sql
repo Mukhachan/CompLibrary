@@ -11,5 +11,5 @@ author text NOT NULL,
 year integer NOT NULL,
 number integer NOT NULL,
 descript text NOT NULL,
-tm integer NOT NULL
+dt_string integer NOT NULL
 );
