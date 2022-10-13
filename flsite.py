@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from flask import Flask, render_template, request, g , redirect, url_for, flash, abort
+from flask import Flask, render_template, request, g , redirect, url_for, flash
 from FDataBase import FDataBase
 
 
@@ -112,18 +112,14 @@ def newbook():
 def booklist():
     db = get_db()
     dbase = FDataBase(db)
-
     cur = db.cursor()
-
     sql = """SELECT * FROM books"""
     print(sql)
-    
     cur.execute(sql)
     results = cur.fetchall()
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
         
 
-        
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
