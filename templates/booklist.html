@@ -3,7 +3,7 @@
 {% block content %}
 {{ super() }}
 <style>
-table{margin: 20px; margin: auto; margin-bottom: 5px; font-size: 14pt;}
+table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
 .header{font-weight:700;}
 </style>
 
@@ -27,7 +27,6 @@ table{margin: 20px; margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <td>{{row["number"]}}</td>
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
-
     </tr>
 {% endfor %}
 </table>

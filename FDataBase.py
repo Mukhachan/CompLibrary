@@ -28,14 +28,3 @@ class FDataBase:
             print("Ошибка добавления книги в БД: "+ str(e))
             return False
         return True
-    def booklist(self):
-        try:
-            self.__cur.execute("""SELECT title, author, year, number, descript, dt_string FROM books""")
-            for res in self.__cur.execute("""SELECT title, author, year, number, descript, dt_string FROM books"""):
-                print(res)
-            if res: 
-                
-                return res 
-        except:
-            print('Ошибка чтения БД')
-        return []

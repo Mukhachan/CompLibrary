@@ -123,17 +123,7 @@ def booklist():
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
         
-"""
-    btitle, author, year, number, descript, dt_string = dbase.booklist()
-    if not btitle:
-        abort(404)
 
-    return render_template('booklist.html', menu=dbase.getMenu(), btitle=btitle, author=author, 
-                            year=year, number=number, descript=descript, dt_string=dt_string)
-
-"""
-
-
-
+        
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
