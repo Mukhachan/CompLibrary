@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+<style>li{display: inline-block;}</style>
+<ul >
+    <li>{{title}}</li>
+    <li>{{author}}</li>
+    <li>{{year}}</li>
+    <li>{{number}}</li>
+    <li>{{descript}}</li>
+    <li>{{dt_string}}</li>
+</ul>
+
+{% endblock %}

@@ -1,7 +1,8 @@
 import sqlite3
 import os
-from flask import Flask, render_template, request, g , redirect, url_for, flash
+from flask import Flask, render_template, request, g , redirect, url_for, flash, abort
 from FDataBase import FDataBase
+
 
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
@@ -106,6 +107,19 @@ def newbook():
             flash('Ошибка добавления книги', category = 'error')
 
     return render_template('newbook.html', css_link= 'newbook.css', title='Newbook')
+
+@app.route('/booklist', methods=["POST", "GET"])
+def booklist():
+    db = get_db()
+    dbase = FDataBase(db)
+
+    title, author, year, number, descript, dt_string = dbase.booklist()
+    if not title:
+        abort(404)
+
+    return render_template('booklist.html', menu=dbase.getMenu(), title=title, author=author, 
+                            year=year, number=number, descript=descript, dt_string=dt_string)
+
 
 
 if __name__ == "__main__":
