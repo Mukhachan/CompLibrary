@@ -55,6 +55,7 @@ html {
   }
 
   .history_back{
+    color: black;
     text-decoration: none;
     background: none;
     user-select: none;

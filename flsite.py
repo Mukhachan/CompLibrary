@@ -33,7 +33,7 @@ def get_db():
     return g.link_db
 
 
-#  редирект на страницу рекомендации  #
+#  Редирект на страницу рекомендации  #
 @app.route('/')
 def index():
     db = get_db()
