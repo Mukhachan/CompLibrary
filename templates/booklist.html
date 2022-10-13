@@ -3,12 +3,12 @@
 {% block content %}
 {{ super() }}
 <style>
-li{display: inline-block; }
-table{margin: 20px;}
+table{margin: 20px; margin: auto; margin-bottom: 5px; font-size: 14pt;}
+.header{font-weight:700;}
 </style>
 
-<table border="1px" align="center">
-    <tr>
+<table border="1px"  >
+    <tr class="header">
         <td>Название</td>
         <td>Автор</td>
         <td>Год выпуска</td>
@@ -18,7 +18,7 @@ table{margin: 20px;}
     </tr>
 </table>
 
-<table border="1px" align="center">
+<table border="1px">
 {% for row in restrictions %}
     <tr>
         <td>{{row["btitle"]}}</td>
