@@ -113,12 +113,25 @@ def booklist():
     db = get_db()
     dbase = FDataBase(db)
 
-    title, author, year, number, descript, dt_string = dbase.booklist()
-    if not title:
+    cur = db.cursor()
+
+    sql = """SELECT * FROM books"""
+    print(sql)
+    
+    cur.execute(sql)
+    results = cur.fetchall()
+
+    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+        
+"""
+    btitle, author, year, number, descript, dt_string = dbase.booklist()
+    if not btitle:
         abort(404)
 
-    return render_template('booklist.html', menu=dbase.getMenu(), title=title, author=author, 
+    return render_template('booklist.html', menu=dbase.getMenu(), btitle=btitle, author=author, 
                             year=year, number=number, descript=descript, dt_string=dt_string)
+
+"""
 
 
 

@@ -2,14 +2,34 @@
 
 {% block content %}
 {{ super() }}
-<style>li{display: inline-block;}</style>
-<ul >
-    <li>{{title}}</li>
-    <li>{{author}}</li>
-    <li>{{year}}</li>
-    <li>{{number}}</li>
-    <li>{{descript}}</li>
-    <li>{{dt_string}}</li>
-</ul>
+<style>
+li{display: inline-block; }
+table{margin: 20px;}
+</style>
+
+<table border="1px" align="center">
+    <tr>
+        <td>Название</td>
+        <td>Автор</td>
+        <td>Год выпуска</td>
+        <td>Кол-во</td>
+        <td>Описание</td>
+        <td>Дата/Время добавления</td>
+    </tr>
+</table>
+
+<table border="1px" align="center">
+{% for row in restrictions %}
+    <tr>
+        <td>{{row["btitle"]}}</td>
+        <td>{{row["author"]}}</td>
+        <td>{{row["year"]}}</td>
+        <td>{{row["number"]}}</td>
+        <td>{{row["descript"]}}</td>
+        <td>{{row["dt_string"]}}</td>
+
+    </tr>
+{% endfor %}
+</table>
 
 {% endblock %}

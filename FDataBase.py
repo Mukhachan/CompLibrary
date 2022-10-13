@@ -21,7 +21,7 @@ class FDataBase:
     def newbook(self, title, author, year, number, descript):
         try:
             dt = datetime.datetime.now()
-            dt_string = dt.strftime("Date: %d/%m/%Y  time: %H:%M:%S")
+            dt_string = dt.strftime("Дата: %d/%m/%Y  Время: %H:%M:%S")
             self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?)", (title, author, year, number, descript, dt_string))
             self.__db.commit()
         except sqlite3.Error as e:
