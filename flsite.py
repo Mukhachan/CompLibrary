@@ -114,7 +114,6 @@ def booklist():
     dbase = FDataBase(db)
     cur = db.cursor()
     sql = """SELECT * FROM books"""
-    print(sql)
     cur.execute(sql)
     results = cur.fetchall()
 
