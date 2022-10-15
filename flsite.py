@@ -1,15 +1,21 @@
-import sqlite3
 import os
+import dotenv
+
+import sqlite3
+
 from flask import Flask, render_template, request, g , redirect, url_for, flash
 from FDataBase import FDataBase
 
 
+dotenv.load_dotenv('.env')
+
+# Обработка глобальных переменных #  
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
-SECRET_KEY = 'ToRa#UCLp1EBPmK6p25W'
 
+# Создание приложение и настройка конфига #
 app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY  
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']  
 app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
@@ -56,13 +62,20 @@ def closed_db(error):
     if hasattr(g, 'link_db'):
         g.link_db.close()
 
+#  Обработка ошибок  #
+@app.errorhandler(404)
+def PageNotFound(error):
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template('page404.html', title='Страница не найдена', 
+                            menu=dbase.getMenu(), css_link = 'styles.css')
+
 #  Страница "о библиотеке"  #
 @app.route('/about')
 def about():
     db = get_db()
     dbase = FDataBase(db)
     return render_template('about.html', menu=dbase.getMenu())
-
 
 #  руты авторизации и регистрации  #
 @app.route('/auth', methods=["POST", "GET"])
@@ -77,14 +90,6 @@ def register():
         print(request.form)
     return render_template('register.html')    
 
-
-#  Обработка ошибок  #
-@app.errorhandler(404)
-def PageNotFound(error):
-    db = get_db()
-    dbase = FDataBase(db)
-    return render_template('page404.html', title='Страница не найдена', 
-                            menu=dbase.getMenu(), css_link = 'styles.css')
 
 #  Добавление книги  #
 @app.route('/newbook', methods=["POST", "GET"])
