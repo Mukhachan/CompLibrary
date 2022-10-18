@@ -2,17 +2,11 @@
 
 {% block content %}
 {{ super() }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 <style>
 table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
 .header{font-weight:700;}
-/*button{
-    
-} */
 </style>
-
-
 
 <table border="1px"  >
     <tr class="header">
@@ -34,7 +28,6 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <td>{{row["number"]}}</td>
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
-
         <td>
             <form action="/booklist" method="POST">
                 <button name='id' value='{{row["id"]}}' >✖</button>
