@@ -28,3 +28,13 @@ class FDataBase:
             print("Ошибка добавления книги в БД: "+ str(e))
             return False
         return True
+
+    def delete_book(self, del_id):
+        try:
+            del_command = """DELETE from books where id = ?"""
+            self.__cur.execute(del_command, (del_id))
+            self.__db.commit()
+        except:
+            print("Чёт не так")
+            return False
+        return True

@@ -122,8 +122,17 @@ def booklist():
     cur.execute(sql)
     results = cur.fetchall()
 
-    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+    if request.method == 'POST':
+        print(request.form['id'])
+
+        com_del = request.form['id']
         
+        dbase.delete_book(com_del)
+
+    else:
+        pass
+    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

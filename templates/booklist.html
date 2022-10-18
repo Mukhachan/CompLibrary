@@ -2,6 +2,8 @@
 
 {% block content %}
 {{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 <style>
 table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
 .header{font-weight:700;}
@@ -9,12 +11,7 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
     
 } */
 </style>
-  <script>
-   function deleteName(f) {
-    if (confirm("Вы уверены, что хотите удалить выделенный пункт?\nЭта операция не восстановима.")) 
-       f.submit();
-   }
-  </script>
+
 
 
 <table border="1px"  >
@@ -37,7 +34,13 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <td>{{row["number"]}}</td>
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
-        <td><button name="delete">✖</button></td>
+
+        <td>
+            <form action="/booklist" method="POST">
+                <button name='id' value='{{row["id"]}}' >✖</button>
+            </form>
+        </td>
+
     </tr>
 {% endfor %}
 </table>

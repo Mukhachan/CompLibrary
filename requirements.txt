@@ -38,7 +38,6 @@ kiwisolver==1.4.4
 Markdown==3.4.1
 MarkupSafe==2.1.1
 matplotlib==3.3.2
-mediapipe==0.8.11
 numpy==1.19.3
 oauthlib==3.2.1
 opencv-contrib-python==4.6.0.66
@@ -78,7 +77,6 @@ uncompyle6==3.8.0
 unpy2exe==0.4
 urllib3==1.26.12
 virtualenv==20.16.5
-vosk==0.3.44
 websockets==10.3
 Werkzeug==2.2.2
 wrapt==1.12.1
