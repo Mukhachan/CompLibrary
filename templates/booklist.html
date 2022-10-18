@@ -6,6 +6,12 @@
 <style>
 table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
 .header{font-weight:700;}
+.search{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14pt;
+}
 </style>
 
 <table border="1px"  >
@@ -18,6 +24,14 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <td>Дата/Время добавления</td>
     </tr>
 </table>
+
+<form action="/booklist" method="post">
+    <div class="search">
+        Введите запрос:   
+        <input name="search_btn" type="text" placeholder="введите фильтр">
+        <button type="submit">поиск</button>
+    </div>
+</form>
 
 <table border="1px">
 {% for row in restrictions %}

@@ -122,12 +122,17 @@ def booklist():
     cur.execute(sql)
     results = cur.fetchall()
 
-    # Обработчик удаления книги #
+  # Обработчик удаления книги #
     if request.method == 'POST':
+        print(request.form)
+
         del_id = request.form['id']
         dbase.delete_book(del_id)
+
     else:
-        pass
+        print('Типо ни одно условие не соблюдено')
+
+
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
 
