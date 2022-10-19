@@ -13,9 +13,9 @@ dotenv.load_dotenv('.env')
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
 
-# Создание приложение и настройка конфига #
+# Создание приложение и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ['SECRET_KEY']  
+app.config['SECRET_KEY'] = 'ToRa#UCLp1EBPmK6p25W'
 app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
@@ -100,7 +100,7 @@ def newbook():
     if request.method == 'POST':
         print(request.form)
         if len(request.form['title']) != 0 and len(request.form['descript']) !=0:
-            res = dbase.newbook(request.form['title'], request.form['author'],
+            res = dbase.newbook_function(request.form['title'], request.form['author'],
                                  request.form['year'], request.form['number'], 
                                  request.form['descript'], )
             if not res:
@@ -118,21 +118,23 @@ def booklist():
     db = get_db()
     dbase = FDataBase(db)
     cur = db.cursor()
-    sql = """SELECT * FROM books"""
-    cur.execute(sql)
+    cur.execute("""SELECT * FROM books""")
     results = cur.fetchall()
 
-  # Обработчик удаления книги #
-    if request.method == 'POST':
+        # Обработчик удаления книги #
+    if request.method == 'POST' and 'id' in request.form:
         print(request.form)
-
         del_id = request.form['id']
-        dbase.delete_book(del_id)
+        dbase.delete_book_function(del_id)
+    
+        # Обработчик поиска #
+    elif request.method == 'POST' and 'search_btn' in request.form:
+        print(request.form)
+        book_search = request.form['search_btn']
+        dbase.search_book_function(book_search)
 
     else:
         print('Типо ни одно условие не соблюдено')
-
-
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
 

@@ -18,7 +18,7 @@ class FDataBase:
             print('Ошибка чтения БД')
         return []
 
-    def newbook(self, title, author, year, number, descript):
+    def newbook_function(self, title, author, year, number, descript):
         try:
             dt = datetime.datetime.now()
             dt_string = dt.strftime("Дата: %d/%m/%Y  Время: %H:%M:%S")
@@ -29,7 +29,7 @@ class FDataBase:
             return False
         return True
 
-    def delete_book(self, del_id):
+    def delete_book_function(self, del_id):
         try:
             del_command = """DELETE from books where id = ?"""
             self.__cur.execute(del_command, (del_id))
@@ -38,3 +38,6 @@ class FDataBase:
             print("Чёт не так")
             return False
         return True
+
+    def search_book_function(self ):
+        print('Пока функция не работает')
