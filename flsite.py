@@ -20,10 +20,11 @@ app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
+"""
 db = get_db()
 dbase = FDataBase(db)
 MENU = dbase.getMenu(db)
-
+"""
 
 #  Создание, соединение и получение данных БД  #
 def connect_db():
