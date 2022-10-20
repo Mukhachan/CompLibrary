@@ -20,6 +20,10 @@ app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
+db = get_db()
+dbase = FDataBase(db)
+MENU = dbase.getMenu(db)
+
 
 #  Создание, соединение и получение данных БД  #
 def connect_db():
@@ -118,13 +122,13 @@ def booklist():
     if request.method == 'POST' and 'id' in request.form:
         print(request.form)
         del_id = request.form['id']
-        dbase.delete_book_function(del_id)
+        dbase.delete_book_function(del_id) # Функция удаления #
     
         # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
         print(request.form)
         book_search = request.form['search_btn']
-        dbase.search_book_function(book_search)
+        dbase.search_book_function(book_search) # Функция поиска #
 
         # Обработчик редактирования #
     elif request.method == 'POST' and 'edit' in request.form:
