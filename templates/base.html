@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     
     <link rel="stylesheet" href ="{{ url_for('static', filename='styles.css' )}}" type="text/css" >
     
@@ -18,26 +18,42 @@
 
 <body>
     <div class="login"><a href="auth">Авторизация</a></div>
-    <nav>
+    <div class="wrapper">
         {% block content -%}
-            {%- block menu_main -%}
-        <ul class="menu-main" >
-            {% for m in menu %}
-            <li><a href="{{m.url}}" class="current">{{m.title}}</a></li>
-            {% endfor %}
-            
-        </ul>
-            {% endblock menu_main -%}
-    </nav>
+
+        <header class="header">
+            <div class="container">
+                <div class="header_body">
+
+                    <div class="header_burger">
+                        <span></span>
+                    </div>
+                    <nav class="header_menu">
+                            {%- block menu_main -%}
+                        <ul class="header_list" >
+                            {% for m in menu %}
+                            <li><a href="{{m.url}}" class="header_link">{{m.title}}</a></li>
+                            {% endfor %}
+                        </ul>
+                            {% endblock menu_main -%}
+                    </nav>
+
+
+                </div>
+            </div>
+        </header>
+    </div>
     <div class="clear"></div> 
     <div class="content">
-        {% if title -%}
-    <h1 class="title">{{title}}</h1>
-        {% else -%}
-    <h1 class="title">Library 1324</h1>
-        {% endif %}
+        <div class="container">
+                {% if title -%}
+            <h1 class="title">{{title}}</h1>
+                {% else -%}
+            <h1 class="title">Library 1324</h1>
+                {% endif %}
 
-        {% endblock -%}
+                {% endblock -%}
+        </div>
     </div>
 </body>
 </html>
