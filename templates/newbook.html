@@ -15,26 +15,18 @@
                                     font-size: 14pt; background: rgb(164, 164, 164);
                                     border-radius:10px">{{msg}}</div>
         {% endfor %}
+        
         <form action="/newbook" method="post">
-            <h3>Добавление книги</h3>
-            <div class="book_name">
-                <input name="title" type="text" id="name" placeholder="Название книги">
+            <h3>{{header_title}}</h3>
+
+            {% for p in inputs %}
+            <div class="{{p.class}}">
+                <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
             </div>
-            <div class="book_author">
-                <input name="author" type="text" placeholder="Автор">
-            </div>            
-            <div class="book_year">
-                <input name="year" type="year" id="year"  placeholder="Год выпуска" >
-            </div>
-            <div class="book_count">
-                <input name="number" type="text" id="count" placeholder="Количество">
-            </div>
-            <div >
-                <textarea name="descript"  class="book_description" cols="18" rows="3" placeholder="Описание" ></textarea>
-            </div>
+            {% endfor %}
 
             <div class="create_btn">
-                <button class="btn-add" type="submit">Добавить</button>
+                <button class="btn-add" type="submit">{{button}}</button>
             </div>
             <div class="back">
                 <a class="history_back" href="/">Назад</a>

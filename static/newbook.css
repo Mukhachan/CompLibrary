@@ -15,7 +15,10 @@ html{
   .form{
     padding:50px 0;
   }
-
+  .form h3{
+    text-align: center;
+    margin: auto;
+  }
   .form form{
     max-width:800px;
     padding:50px 70px;
@@ -33,30 +36,18 @@ html{
     padding: 3%;
     border-radius: 6px;
     box-shadow: 2px 2px 3px black;
-    user-select: none;}
+    user-select: none;
+    color: #fff;
+  }
+    
    .btn-add:hover{
     box-shadow: 2px 2px 7px black;
     background: #4191fa;
    }
-   .book_author{
+  .book_name, .book_author, .book_year, .book_count, .book_descript{
     margin-bottom: 6px;
-   }
-   .book_name{
-    margin-bottom: 6px;
-   }
-   .book_year{
-    margin-bottom: 6px;
-   }
-   .book_description{
-    margin-top: 6px;
-    margin-bottom: 6px;
-    
   }
-   textarea {
-    font-size: 11pt;
-    resize: none;
-    
-   }
+
    .back{
     margin-top: 10px;
     margin-right: 3px;
@@ -70,5 +61,4 @@ html{
   .history_back:hover{
     text-decoration: underline;
     background-color: rgba(128, 128, 128, 0.47); 
-    
   }

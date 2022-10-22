@@ -4,7 +4,6 @@
     padding: 0.5px 0 0.5px;
 }
 
-.wrapper{}
 
 .container{
   max-width: 1440px;
@@ -40,8 +39,6 @@
   height: 80px;
   align-items: center;
 }
-.header_burger{}
-.header_menu{}
 
 @media (max-width:767px){
   .header::before, .header_body{

@@ -109,15 +109,21 @@ def newbook():
         else:
             flash('Ошибка добавления книги', category = 'error')
 
-    return render_template('newbook.html', css_link= 'newbook.css', title='Newbook')
+    elif request.method == 'GET' and request.args.get('edit') != None:
+        edit = request.args.get('edit')
+
+        return render_template('newbook.html', css_link= 'newbook.css', title='Editbook', edit=edit, 
+        header_title='Редактирование книги', button='Изменить', inputs=dbase.get_inputs_newbook())
+
+    return render_template('newbook.html', css_link= 'newbook.css', title='Newbook', 
+                header_title='Добавить книгу', button='Добавить', inputs=dbase.get_inputs_newbook())
+
 
 @app.route('/booklist', methods=["POST", "GET"])
 def booklist():
     db = get_db()
     dbase = FDataBase(db)
-    cur = db.cursor()
-    cur.execute("""SELECT * FROM books""")
-    results = cur.fetchall()
+    results = dbase.all_books_function()
 
         # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:
@@ -142,6 +148,8 @@ def booklist():
         print('Типо ни одно условие не соблюдено')
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+
+
 
 
 if __name__ == "__main__":

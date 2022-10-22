@@ -75,6 +75,7 @@ html {
     border-radius: 6px;
     box-shadow: 2px 2px 3px black;
     user-select: none;
+    color: #fff;
 
   }
   .btn-create-account:hover{

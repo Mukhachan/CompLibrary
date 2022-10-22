@@ -12,10 +12,33 @@ class FDataBase:
         try:
             self.__cur.execute(sql)
             res = self.__cur.fetchall()
+
             if res: 
                 return res 
         except:
-            print('Ошибка чтения БД')
+            print('Ошибка чтения БД (menu)')
+        return []
+
+    def get_inputs_newbook(self):
+        sql = '''SELECT * FROM placeholder'''
+        try:
+            self.__cur.execute(sql)
+            res = self.__cur.fetchall()
+            if res:
+                return res
+        except:
+            print('Ошибка чтения БД (placeholder)')
+        return []
+
+    def all_books_function(self):
+        try:
+            self.__cur.execute("""SELECT * FROM books""")
+            results = self.__cur.fetchall()
+
+            if results:
+                return results    
+        except:
+            print('Ошибка чтения БД (books)')
         return []
 
     def newbook_function(self, title, author, year, number, descript):
@@ -39,12 +62,12 @@ class FDataBase:
             return False
         return True
 
-    def search_book_function(self, book_search):
+    def search_book_function(self, book_search): #  Функция поиска  #
         try:
             self.__cur.execute()
         except:
             pass
         print('Пока функция почти не работает')
 
-    def edit_book_function(self, book_edit):
+    def edit_book_function(self, book_edit): #  Функция редактирования  #
         print('Пока функция не работает')

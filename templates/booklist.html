@@ -15,6 +15,14 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
 </style>
 
 
+<script>
+    // Когда пользователь нажимает на <div>, открыть popup
+    function myFunction() {
+        var popup = document.getElementById("myPopup");
+        popup.classList.toggle("show");
+    }
+</script>
+
 <form action="/booklist" method="post">
     <div class="search">
         Введите запрос:   
@@ -43,17 +51,26 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
         <td>
-            <form action="/booklist" method="POST">
+            <form action="/newbook" method="GET">
                 <button name="edit" value='{{row["id"]}}'>✎</button>
             </form>
         </td>
         <td>
-            <form action="/booklist" method="POST">
-                <button name='id' value='{{row["id"]}}' >✖</button>
-            </form>
+            <div class="popup" onclick="myFunction()"><button>✖</button>
+                <span class="popuptext" id="myPopup">Вы уверены что хотите удалить?
+                    <form action="/booklist" method="POST">
+                        <button>Нет</button>
+                        <button name="id" value='{{row["id"]}}'>Да</button>
+                    </form>
+                </span>
+            </div>
         </td>
     </tr>
+
+
 {% endfor %}
 </table>
+
+
 
 {% endblock %}
