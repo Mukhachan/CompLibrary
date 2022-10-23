@@ -15,15 +15,32 @@
                                     font-size: 14pt; background: rgb(164, 164, 164);
                                     border-radius:10px">{{msg}}</div>
         {% endfor %}
-        
+
         <form action="/newbook" method="post">
             <h3>{{header_title}}</h3>
 
-            {% for p in inputs %}
-            <div class="{{p.class}}">
-                <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
-            </div>
-            {% endfor %}
+            {% if edit %}
+
+
+
+                {% for p in inputs %}
+
+                    <div class="{{p.class}}">
+                        <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}" >
+                    </div>
+
+                {% endfor %}
+
+            {% elif not edit %}
+
+                {% for p in inputs %}
+                <div class="{{p.class}}">
+                    <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
+                </div>
+                {% endfor %}
+            
+            {% endif %}
+
 
             <div class="create_btn">
                 <button class="btn-add" type="submit">{{button}}</button>

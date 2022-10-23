@@ -112,10 +112,13 @@ def newbook():
     elif request.method == 'GET' and request.args.get('edit') != None:
         edit = request.args.get('edit')
 
-        return render_template('newbook.html', css_link= 'newbook.css', title='Editbook', edit=edit, 
+        results = dbase.search_book_function(edit)
+
+
+        return render_template('newbook.html', title='Editbook', edit=edit, results=results,
         header_title='Редактирование книги', button='Изменить', inputs=dbase.get_inputs_newbook())
 
-    return render_template('newbook.html', css_link= 'newbook.css', title='Newbook', 
+    return render_template('newbook.html', title='Newbook', 
                 header_title='Добавить книгу', button='Добавить', inputs=dbase.get_inputs_newbook())
 
 

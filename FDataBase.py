@@ -64,10 +64,14 @@ class FDataBase:
 
     def search_book_function(self, book_search): #  Функция поиска  #
         try:
-            self.__cur.execute()
+            self.__cur.execute(f"SELECT * FROM books WHERE id = '{book_search}'")
+            results = self.__cur.fetchall()
+            if results:
+                return results
         except:
-            pass
+            print('Ошибка чтения из БД с ключом edit (books)')
         print('Пока функция почти не работает')
+        return []
 
     def edit_book_function(self, book_edit): #  Функция редактирования  #
         print('Пока функция не работает')
