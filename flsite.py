@@ -15,7 +15,7 @@ DEBUG = True
 
 # Создание приложение и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ToRa#UCLp1EBPmK6p25W'
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
@@ -112,7 +112,7 @@ def newbook():
     elif request.method == 'GET' and request.args.get('edit') != None:
         edit = request.args.get('edit')
 
-        results = dbase.search_book_function(edit)
+        results = dbase.search_book_function(int(edit))
 
 
         return render_template('newbook.html', title='Editbook', edit=edit, results=results,
@@ -136,23 +136,21 @@ def booklist():
     
         # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
+        
         print(request.form)
         book_search = request.form['search_btn']
-        dbase.search_book_function(book_search) # Функция поиска #
+        results = dbase.search_book_function(book_search) # Функция поиска #
+        print(results)
 
-        # Обработчик редактирования #
-    elif request.method == 'POST' and 'edit' in request.form:
-        print(request.form)
-        book_edit = request.form['edit']
-        dbase.edit_book_function(book_edit)
+        if results == None:
+            flash('Книга не найдена', category = 'error')
+            return render_template('booklist.html', menu=dbase.getMenu())
 
     else:
         print(request.form)
         print('Типо ни одно условие не соблюдено')
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
-
-
 
 
 if __name__ == "__main__":

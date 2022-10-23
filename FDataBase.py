@@ -63,15 +63,27 @@ class FDataBase:
         return True
 
     def search_book_function(self, book_search): #  Функция поиска  #
-        try:
-            self.__cur.execute(f"SELECT * FROM books WHERE id = '{book_search}'")
-            results = self.__cur.fetchall()
-            if results:
-                return results
-        except:
-            print('Ошибка чтения из БД с ключом edit (books)')
-        print('Пока функция почти не работает')
-        return []
+        if isinstance(book_search, str) :
+            try:
+                self.__cur.execute(f"SELECT * FROM books WHERE btitle = '{book_search}' or author = '{book_search}' or year = '{book_search}' or number = '{book_search}' ")
+                results = self.__cur.fetchall()
+                if results:
+                    return results
+            except:
+                print('Ошибка чтения из БД с ключом edit (books)')          
+            
+
+        elif isinstance(book_search, int) :
+            try:
+                self.__cur.execute(f"SELECT * FROM books WHERE id = '{book_search}'")
+                results = self.__cur.fetchall()
+                if results:
+                    return results
+            except:
+                print('Ошибка чтения из БД с ключом edit (books)')
+        
+            print('Пока функция почти не работает')
+            return []
 
     def edit_book_function(self, book_edit): #  Функция редактирования  #
         print('Пока функция не работает')

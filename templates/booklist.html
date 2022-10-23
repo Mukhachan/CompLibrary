@@ -4,13 +4,35 @@
 {{ super() }}
 
 <style>
-table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
-.header{font-weight:700;}
+table{
+    margin: auto; 
+    margin-bottom: 5px; 
+    font-size: 14pt;}
+.header{
+    font-weight:700;
+}
 .search{
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 14pt;
+}
+.flash{
+    text-align: center;
+    margin: auto;
+    font-size: 14pt; 
+    color: rgb(213, 213, 213);
+    background: rgb(167, 10, 10); 
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 20%;
+}
+a{
+    text-decoration: underline;
+    color: rgb(213, 213, 213);
+}
+a:hover{
+    color: rgb(167, 167, 167);
 }
 </style>
 
@@ -30,6 +52,13 @@ table{margin: auto; margin-bottom: 5px; font-size: 14pt;}
         <button type="submit">поиск</button>
     </div>
 </form>
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash">
+    {{msg}}
+    <a href="/booklist" >Показать все</a>
+</div>
+{% endfor %}
 
 <table border="1px"  >
     <tr class="header">

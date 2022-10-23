@@ -3,7 +3,23 @@
 {% block content %}
 {{ super() }}
 
-<center><div><h1>Такой страницы типо нет.<br>Ну или её удалили</h1></div></center>
-<center><div style="font-size: 24pt;"><h1>404</h1></div></center>
+<style>
+    div{
+        text-align: center;
+    }
+    .head{
+        font-size: 28pt;
+    }
+    .number404{
+        font-size: 60pt;
+    }
+
+</style>
+<div class="head">
+    Такой страницы типо нет.<br>Ну или её удалили
+</div>
+<div class="number404">
+    404
+</div>
 
 {% endblock %}
