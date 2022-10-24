@@ -114,7 +114,6 @@ def newbook():
 
         results = dbase.search_book_function(int(edit))
 
-
         return render_template('newbook.html', title='Editbook', edit=edit, results=results,
         header_title='Редактирование книги', button='Изменить', inputs=dbase.get_inputs_newbook())
 

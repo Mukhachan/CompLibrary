@@ -7,7 +7,8 @@
 table{
     margin: auto; 
     margin-bottom: 5px; 
-    font-size: 14pt;}
+    font-size: 14pt;
+}
 .header{
     font-weight:700;
 }
@@ -34,6 +35,15 @@ a{
 a:hover{
     color: rgb(167, 167, 167);
 }
+.btn-search{
+    border-radius: 2px;
+}
+.btn-search:hover{
+    box-shadow: 0px 0px 3px black;
+}
+.btn-edit:hover, .popup:hover{
+    box-shadow: 0px 0px 3px black;
+}
 </style>
 
 
@@ -49,7 +59,7 @@ a:hover{
     <div class="search">
         Введите запрос:   
         <input name="search_btn" type="text" placeholder="введите фильтр" id="search">
-        <button type="submit">поиск</button>
+        <button class='btn-search' type="submit">поиск</button>
     </div>
 </form>
 
@@ -60,7 +70,7 @@ a:hover{
 </div>
 {% endfor %}
 
-<table border="1px"  >
+<table border="1px">
     <tr class="header">
         <td>Название</td>
         <td>Автор</td>
@@ -69,8 +79,6 @@ a:hover{
         <td>Описание</td>
         <td>Дата/Время добавления</td>
     </tr>
-</table>
-<table border="1px">
 {% for row in restrictions %}
     <tr>
         <td>{{row["btitle"]}}</td>
@@ -81,7 +89,7 @@ a:hover{
         <td>{{row["dt_string"]}}</td>
         <td>
             <form action="/newbook" method="GET">
-                <button name="edit" value='{{row["id"]}}'>✎</button>
+                <button class="btn-edit"name="edit" value='{{row["id"]}}'>✎</button>
             </form>
         </td>
         <td>
