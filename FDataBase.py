@@ -63,17 +63,29 @@ class FDataBase:
         return True
 
     def search_book_function(self, book_search): #  Функция поиска  #
-        if isinstance(book_search, str) :
+
+        if book_search.isdigit() == False:
+            #def lower_string(_str):
+            #    return _str.lower()
+
+            #self.__db.create_function("mylower", 1, lower_string)
+            
+            print('(STR) _SEARCH "' + book_search.lower() + '"')
+            req = '%' + book_search.lower() + '%'
+            print('- ' + req)
+            
             try:
-                self.__cur.execute(f"SELECT * FROM books WHERE btitle = '{book_search}' or author = '{book_search}' or year = '{book_search}' or number = '{book_search}' ")
+                self.__cur.execute("""SELECT * FROM books WHERE mylower(btitle) LIKE ? """, (req))
                 results = self.__cur.fetchall()
                 if results:
                     return results
             except:
-                print('Ошибка чтения из БД с ключом edit (books)')          
+                print('Ошибка чтения из БД с ключом edit (books)')        
             
-
-        elif isinstance(book_search, int) :
+            
+            #   or mylower(author)
+        elif book_search.isdigit() == True :
+            print('(INT) _SEARCH ' + book_search.lower())
             try:
                 self.__cur.execute(f"SELECT * FROM books WHERE id = '{book_search}'")
                 results = self.__cur.fetchall()
@@ -83,7 +95,7 @@ class FDataBase:
                 print('Ошибка чтения из БД с ключом edit (books)')
         
             print('Пока функция почти не работает')
-            return []
+            
 
     def edit_book_function(self, book_edit): #  Функция редактирования  #
         print('Пока функция не работает')

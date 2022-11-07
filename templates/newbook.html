@@ -7,27 +7,35 @@
     <link rel="stylesheet" href ="{{ url_for('static', filename='newbook.css' )}}" type="text/css" >
     <title>{{title}}</title>
 </head>
-<body>
 
+
+<body>
     <div class="form">
         {% for cat, msg in get_flashed_messages(True) %}
         <div class="flash {{cat}}" style="text-align: center; 
                                     font-size: 14pt; background: rgb(164, 164, 164);
                                     border-radius:10px">{{msg}}</div>
         {% endfor %}
-
         <form action="/newbook" method="post">
             <h3>{{header_title}}</h3>
 
             {% if edit %}
 
-                {% for p in inputs %}
-
-                    <div class="{{p.class}}">
-                        <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}" >
-                    </div>
-
-                {% endfor %}
+                <div class="input">
+                    <input name="title" type="text" placeholder="Название книги" value="Какое-то число">
+                </div>
+                <div class="input">
+                    <input name="title" type="text" placeholder="Автор" value="Автор">
+                </div>
+                <div class="input">
+                    <input name="title" type="text" placeholder="Год выпуска" value="Год выпуска">
+                </div>
+                <div class="input">
+                    <input name="title" type="text" placeholder="Количество" value="Количество">
+                </div>
+                <div class="input">
+                    <input name="title" type="text" placeholder="Описание" value="Описание">
+                </div>
 
             {% elif not edit %}
 

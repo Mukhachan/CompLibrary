@@ -20,12 +20,6 @@ app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
-"""
-db = get_db()
-dbase = FDataBase(db)
-MENU = dbase.getMenu(db)
-"""
-
 #  Создание, соединение и получение данных БД  #
 def connect_db():
     conn = sqlite3.connect(app.config['DATABASE'])
@@ -80,39 +74,41 @@ def about():
     return render_template('about.html', menu=dbase.getMenu())
 
 #  руты авторизации и регистрации  #
-@app.route('/auth', methods=["POST", "GET"])
+@app.route('/auth', methods=["POST"])
 def auth():
     if request.method == 'POST':
         print(request.form)
 
     return render_template('auth.html')
-@app.route('/register', methods=["POST", "GET"])
+@app.route('/register', methods=["POST"])
 def register():
     if request.method == 'POST':
         print(request.form)
     return render_template('register.html')    
 
 
-#  Добавление книги  #
+#  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
 def newbook():
     db = get_db()
     dbase = FDataBase(db)
 
+        # Добавление книги #
     if request.method == 'POST':
         print(request.form)
         if len(request.form['title']) != 0 and len(request.form['descript']) !=0:
             dbase.newbook_function(request.form['title'], request.form['author'],
                 request.form['year'], request.form['number'], request.form['descript'], )
                     
-            flash('Книга добавлена', category = 'success') 
+            flash('Книга добавлена', category = 'success')
         else:
             flash('Ошибка добавления книги', category = 'error')
-
+        
+        # GET запрос на редактирование книги #
     elif request.method == 'GET' and request.args.get('edit') != None:
         edit = request.args.get('edit')
 
-        results = dbase.search_book_function(int(edit))
+        results = dbase.search_book_function(edit)
 
         return render_template('newbook.html', title='Editbook', edit=edit, results=results,
         header_title='Редактирование книги', button='Изменить', inputs=dbase.get_inputs_newbook())
@@ -135,7 +131,11 @@ def booklist():
     
         # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
-        
+        def myfunc(_str):
+            return _str.lower()
+
+        connect_db().create_function("mylower", 1, myfunc)
+
         print(request.form)
         book_search = request.form['search_btn']
         results = dbase.search_book_function(book_search) # Функция поиска #
@@ -153,4 +153,4 @@ def booklist():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=DEBUG)
