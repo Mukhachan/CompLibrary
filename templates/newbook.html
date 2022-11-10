@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href ="{{ url_for('static', filename='newbook.css' )}}" type="text/css" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='newbook.css' )}}" type="text/css">
     <title>{{title}}</title>
 </head>
 
@@ -21,30 +22,30 @@
 
             {% if edit %}
 
-                <div class="input">
-                    <input name="title" type="text" placeholder="Название книги" value="Какое-то число">
-                </div>
-                <div class="input">
-                    <input name="title" type="text" placeholder="Автор" value="Автор">
-                </div>
-                <div class="input">
-                    <input name="title" type="text" placeholder="Год выпуска" value="Год выпуска">
-                </div>
-                <div class="input">
-                    <input name="title" type="text" placeholder="Количество" value="Количество">
-                </div>
-                <div class="input">
-                    <input name="title" type="text" placeholder="Описание" value="Описание">
-                </div>
+            <div class="input">
+                <input name="title" type="text" placeholder="Название книги" value="Какое-то число">
+            </div>
+            <div class="input">
+                <input name="title" type="text" placeholder="Автор" value="Автор">
+            </div>
+            <div class="input">
+                <input name="title" type="text" placeholder="Год выпуска" value="Год выпуска">
+            </div>
+            <div class="input">
+                <input name="title" type="text" placeholder="Количество" value="Количество">
+            </div>
+            <div class="input">
+                <input name="title" type="text" placeholder="Описание" value="Описание">
+            </div>
 
             {% elif not edit %}
 
-                {% for p in inputs %}
-                <div class="{{p.class}}">
-                    <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
-                </div>
-                {% endfor %}
-            
+            {% for p in inputs %}
+            <div class="{{p.class}}">
+                <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
+            </div>
+            {% endfor %}
+
             {% endif %}
 
 
@@ -58,4 +59,5 @@
         </form>
     </div>
 </body>
+
 </html>
