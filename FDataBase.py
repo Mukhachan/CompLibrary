@@ -5,6 +5,11 @@ import datetime
 class FDataBase:
     def __init__(self, db):
         self.__db = db
+
+        def lower_string(_str):
+            return _str.lower()
+        self.__db.create_function("mylower", 1, lower_string)
+
         self.__cur = db.cursor()
 
     def getMenu(self):
@@ -66,23 +71,19 @@ class FDataBase:
     def search_book_function(self, book_search):  # Функция поиска  #
 
         if book_search.isdigit() == False:
-            # def lower_string(_str):
-            #    return _str.lower()
-
-            #self.__db.create_function("mylower", 1, lower_string)
 
             print('(STR) _SEARCH "' + book_search.lower() + '"')
             req = '%' + book_search.lower() + '%'
             print('- ' + req)
 
             try:
-                self.__cur.execute(
-                    """SELECT * FROM books WHERE mylower(btitle) LIKE ? """, (req))
+                self.__cur.execute("""SELECT * FROM books WHERE mylower(btitle) LIKE ?""", (req,))
+                
                 results = self.__cur.fetchall()
                 if results:
                     return results
             except:
-                print('Ошибка чтения из БД с ключом edit (books)')
+                print('Ошибка чтения из БД ')
 
             #   or mylower(author)
         elif book_search.isdigit() == True:

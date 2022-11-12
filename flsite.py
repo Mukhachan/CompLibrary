@@ -20,14 +20,13 @@ app.config.from_object(__name__)
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
+
+
 #  Создание, соединение и получение данных БД  #
-
-
 def connect_db():
     conn = sqlite3.connect(app.config['DATABASE'])
     conn.row_factory = sqlite3.Row
     return conn
-
 
 def create_db():
     '''Вспомогательная функция для создания таблиц бд'''
@@ -36,7 +35,6 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
-
 
 def get_db():
     '''Соединение с бд, если оно ещё не установлено '''
@@ -50,27 +48,24 @@ def get_db():
 def index():
     return redirect(url_for('recommended'))
 
+
 #  Страница рекомендации (по сути главная)  #
-
-
 @app.route('/recommended')
 def recommended():
     db = get_db()
     dbase = FDataBase(db)
     return render_template('index.html', css_link='styles.css', menu=dbase.getMenu())
 
+
 #  Закрытие соединения с базой данных  #
-
-
 @app.teardown_appcontext
 def closed_db(error):
     """Закрытие соединения"""
     if hasattr(g, 'link_db'):
         g.link_db.close()
 
+
 #  Обработка ошибок  #
-
-
 @app.errorhandler(404)
 def PageNotFound(error):
     db = get_db()
@@ -78,27 +73,25 @@ def PageNotFound(error):
     return render_template('page404.html', title='Страница не найдена',
                            menu=dbase.getMenu(), css_link='styles.css')
 
+
 #  Страница "о библиотеке"  #
-
-
 @app.route('/about')
 def about():
     db = get_db()
     dbase = FDataBase(db)
     return render_template('about.html', menu=dbase.getMenu())
 
-#  руты авторизации и регистрации  #
 
-
-@app.route('/auth', methods=["POST"])
+#  рут авторизации  #
+@app.route('/auth', methods=["POST", "GET"])
 def auth():
     if request.method == 'POST':
         print(request.form)
 
     return render_template('auth.html')
 
-
-@app.route('/register', methods=["POST"])
+#  рут регистрации  #
+@app.route('/register', methods=["POST", "GET"])
 def register():
     if request.method == 'POST':
         print(request.form)
@@ -149,10 +142,6 @@ def booklist():
 
         # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
-        def myfunc(_str):
-            return _str.lower()
-
-        connect_db().create_function("mylower", 1, myfunc)
 
         print(request.form)
         book_search = request.form['search_btn']
