@@ -90,6 +90,7 @@ def auth():
 
     return render_template('auth.html')
 
+
 #  рут регистрации  #
 @app.route('/register', methods=["POST", "GET"])
 def register():
@@ -143,10 +144,8 @@ def booklist():
         # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
 
-        print(request.form)
         book_search = request.form['search_btn']
-        results = dbase.search_book_function(book_search)  # Функция поиска #
-        print(results)
+        results = dbase.search_book_function(book_search)  # Функция поиска #        
 
         if results == None:
             flash('Книга не найдена', category='error')

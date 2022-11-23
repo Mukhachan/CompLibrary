@@ -9,7 +9,6 @@ class FDataBase:
         def lower_string(_str):
             return _str.lower()
         self.__db.create_function("mylower", 1, lower_string)
-
         self.__cur = db.cursor()
 
     def getMenu(self):
@@ -77,8 +76,8 @@ class FDataBase:
             print('- ' + req)
 
             try:
-                self.__cur.execute("""SELECT * FROM books WHERE mylower(btitle) LIKE ?""", (req,))
-                
+                self.__cur.execute("""SELECT * FROM books WHERE mylower(btitle) LIKE ? or mylower(author) LIKE ?""", (req, req))
+
                 results = self.__cur.fetchall()
                 if results:
                     return results
@@ -86,7 +85,7 @@ class FDataBase:
                 print('Ошибка чтения из БД ')
 
             #   or mylower(author)
-        elif book_search.isdigit() == True:
+        elif book_search.isdigit():
             print('(INT) _SEARCH ' + book_search.lower())
             try:
                 self.__cur.execute(
