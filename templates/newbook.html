@@ -6,52 +6,65 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='newbook.css' )}}" type="text/css">
-    <title>{{title}}</title>
+
 </head>
 
 
 <body>
     <div class="form">
         {% for cat, msg in get_flashed_messages(True) %}
-        <div class="flash {{cat}}" style="text-align: center; 
-                                    font-size: 14pt; background: rgb(164, 164, 164);
-                                    border-radius:10px">{{msg}}</div>
+            <div class="flash {{cat}}" style="text-align: center; 
+                                        font-size: 14pt; background: rgb(164, 164, 164);
+                                        border-radius:10px">{{msg}}</div>
         {% endfor %}
+
         <form action="/newbook" method="post">
-            <h3>{{header_title}}</h3>
-
+            
             {% if edit %}
+                <title>Editbook</title>
+                <h3>Редактировать<br>книгу</h3>
 
-            <div class="input">
-                <input name="title" type="text" placeholder="Название книги" value="Какое-то число">
-            </div>
-            <div class="input">
-                <input name="title" type="text" placeholder="Автор" value="Автор">
-            </div>
-            <div class="input">
-                <input name="title" type="text" placeholder="Год выпуска" value="Год выпуска">
-            </div>
-            <div class="input">
-                <input name="title" type="text" placeholder="Количество" value="Количество">
-            </div>
-            <div class="input">
-                <input name="title" type="text" placeholder="Описание" value="Описание">
-            </div>
+                {% for p in valuelist %}
+                    <div></div>
+                    <div class="input">
+                        <input name="btitle" type="text" placeholder="Название книги" value="{{p['btitle']}}">
+                    </div>
+                    <div class="input">
+                        <input name="author" type="text" placeholder="Автор" value="{{p['author']}}">
+                    </div>
+                    <div class="input">
+                        <input name="year" type="text" placeholder="Год выпуска" value="{{p['year']}}">
+                    </div>
+                    <div class="input">
+                        <input name="number" type="text" placeholder="Количество" value="{{p['number']}}">
+                    </div>
+                    <div class="input">
+                        <input name="descript" type="text" placeholder="Описание" value="{{p['descript']}}">
+                    </div>
+                    <div>
+                        <input name="book_picture" type="text" placeholder="Название картинки" value="{{p['book_picture']}}">
+                    </div>
+                {% endfor %}
+                <div class="create_btn">
+                    <button class="btn-add" type="submit">Изменить</button>
+                </div>
 
-            {% elif not edit %}
 
-            {% for p in inputs %}
-            <div class="{{p.class}}">
-                <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
-            </div>
-            {% endfor %}
-
+            {% else %}
+                <title>Newbook</title>
+                <h3>Добавить книгу</h3>
+                {% for p in inputs %}
+                    <div class="{{p.class}}">
+                        <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
+                    </div>
+                {% endfor %}
+                <div class="create_btn">
+                    <button class="btn-add" type="submit">Добавить</button>
+                </div>
             {% endif %}
 
 
-            <div class="create_btn">
-                <button class="btn-add" type="submit">{{button}}</button>
-            </div>
+
             <div class="back">
                 <a class="history_back" href="/">Назад</a>
             </div>

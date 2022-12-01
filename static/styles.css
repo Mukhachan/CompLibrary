@@ -81,6 +81,20 @@ html, body{
 }
 
 
+.Books_Table{
+  display: flex;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  list-style: none;
+}
+.books{
+  list-style: none;
+}
+
+
+
+
 .Test{
   font-size: 16pt;
   text-align: center;

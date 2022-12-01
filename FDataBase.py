@@ -23,6 +23,16 @@ class FDataBase:
             print('Ошибка чтения БД (menu)')
         return []
 
+    def value_list(self, book_id):
+        sql = '''SELECT * FROM books where id = ?'''
+        self.__cur.execute(sql, (book_id,))
+        res = self.__cur.fetchall()
+        
+        if res:
+            print(f"Это вот то что получилось с бд: {list(res)}")
+            return res
+        return ['Пустота']
+    
     def get_inputs_newbook(self):
         sql = '''SELECT * FROM placeholder'''
         try:
@@ -32,7 +42,7 @@ class FDataBase:
                 return res
         except:
             print('Ошибка чтения БД (placeholder)')
-        return []
+        return ['Пустота']
 
     def all_books_function(self):
         try:
@@ -45,12 +55,12 @@ class FDataBase:
             print('Ошибка чтения БД (books)')
         return []
 
-    def newbook_function(self, title, author, year, number, descript):
+    def newbook_function(self, btitle, author, year, number, descript, book_picture):
         try:
             dt = datetime.datetime.now()
             dt_string = dt.strftime("%d/%m/%Y %H:%M:%S")
-            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?)",
-                               (title, author, year, number, descript, dt_string))
+            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)",
+                               (btitle, author, year, number, descript, dt_string, book_picture))
             self.__db.commit()
         except sqlite3.Error as e:
             print("Ошибка добавления книги в БД: " + str(e))
@@ -59,8 +69,8 @@ class FDataBase:
 
     def delete_book_function(self, del_id):
         try:
-            del_command = """DELETE from books where id = ?"""
-            self.__cur.execute(del_command, (del_id))
+            del_command = f"DELETE from books where id = {del_id}"
+            self.__cur.execute(del_command)
             self.__db.commit()
         except:
             print("Чёт не так")
@@ -97,6 +107,3 @@ class FDataBase:
                 print('Ошибка чтения из БД с ключом edit (books)')
 
             print('Пока функция почти не работает')
-
-    def edit_book_function(self, book_edit):  # Функция редактирования  #
-        print('Пока функция не работает')

@@ -6,14 +6,36 @@
 <div><a href="newbook">Добавить</a></div>
 <div><a href="/booklist">Список книг</a></div>
 
+<style>
+    table{
+        margin-bottom: 5px; 
+        font-size: 14pt;
+        table-layout: fixed;        
+    }
+    .header{
+        font-weight:700;
+    }
+    .table_text{
+        margin-left: 10px;
+    }
+</style>
 
-<div class="content">
-    <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sed eligendi eum facere rem esse, maxime vel, voluptatum dolor rerum corrupti nemo quisquam veritatis qui quasi labore reprehenderit optio id inventore dignissimos iusto, sit consequatur? Vero tenetur fugit cupiditate quae magni obcaecati veniam nam iure iusto! Perspiciatis hic consequuntur, odit nostrum dolore autem consequatur, doloribus ex distinctio qui nesciunt amet? Quisquam doloribus nam similique repellendus. Aliquam, voluptas cum reprehenderit deleniti ut pariatur vel quam nulla animi totam dolores sit quibusdam distinctio provident repellat necessitatibus iste, repellendus eligendi magnam optio illo. Voluptas nobis impedit quod in eligendi. Atque minima repudiandae distinctio pariatur perferendis nemo tenetur dolorum, accusamus provident temporibus voluptatem reprehenderit. Animi, expedita voluptas! Soluta reprehenderit minus, illo quam aspernatur iste labore ut nulla unde, cumque excepturi esse error similique voluptate minima perferendis architecto laboriosam? Odio doloremque quis ducimus nam asperiores molestiae dolore aliquid, laborum sunt incidunt quaerat, rerum ex reprehenderit quibusdam rem necessitatibus a quae nisi qui nemo quo ut. Dolorum qui hic eveniet tenetur! Dolorem error sapiente dicta quam, dolor tempora quibusdam explicabo obcaecati nisi deleniti dolore excepturi odit? Illo provident aliquid laboriosam ea maxime quo necessitatibus debitis, quia, obcaecati saepe sed commodi possimus deleniti suscipit impedit vero fugiat reprehenderit labore soluta? Nobis, nihil asperiores. Aliquid perferendis ea fugiat repudiandae possimus totam dolorem deserunt tenetur laudantium autem, ex nam ab atque magnam numquam at velit, iusto consectetur voluptate molestiae sit alias odio! Illo enim ipsam ducimus nostrum quia aut quis praesentium ea nisi odit numquam ullam velit harum non, minima rem eveniet animi libero? Incidunt beatae, rerum modi sed numquam, vitae dignissimos adipisci aut laboriosam amet fugit debitis consequatur sunt tempore hic exercitationem facilis repellat provident assumenda aperiam? Ut officiis aperiam natus itaque atque voluptate, porro ipsam in a nihil expedita totam laborum earum laudantium modi! Perferendis rerum ad ullam?
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, autem. Iste quaerat inventore, ex optio aspernatur repellendus. Vero cupiditate reprehenderit nobis fugiat enim, exercitationem nemo expedita autem possimus esse non dolores recusandae earum reiciendis maxime corrupti? Sequi non aliquam velit, nemo autem quos quas unde. Odit aut corrupti tempora voluptatem libero asperiores incidunt voluptas eligendi ad. Obcaecati provident blanditiis omnis autem ratione nostrum aut rem tempora aliquid sed quibusdam fuga quisquam quidem esse voluptatem asperiores quo, cumque cum mollitia et pariatur dolorum in earum! Molestias amet aut doloremque debitis repellendus aliquid excepturi et suscipit culpa esse provident, rem quisquam quod, ipsum at asperiores ea eius inventore est voluptatibus atque minima. Laudantium tempora praesentium, explicabo mollitia sint natus! Et veritatis veniam quisquam quidem exercitationem iste repellat. Laudantium dolorum quisquam eaque, optio commodi cupiditate doloremque id assumenda voluptate deleniti maxime cumque architecto molestias aperiam? Hic excepturi quaerat ipsam laudantium maxime, nobis, totam aliquid repellendus deserunt magni animi dolorum dolorem beatae recusandae veniam omnis. Inventore, expedita ratione! Labore nostrum totam ducimus dolore, fugiat repudiandae animi a nesciunt ipsum debitis in optio, veritatis corrupti quidem quod non, omnis asperiores ipsam voluptates dignissimos sit. Debitis, dolores amet. Facilis magnam, beatae quibusdam est suscipit quae voluptas dolores repellat harum molestias laudantium omnis facere error aspernatur neque repellendus, distinctio temporibus, consequuntur debitis molestiae cupiditate doloremque. Ipsum velit nesciunt temporibus maxime, quas magnam tenetur soluta, laborum incidunt alias ut eos, accusamus ullam impedit labore voluptatem. Nisi qui eum facere consequuntur. Vero eaque inventore a hic cumque perferendis itaque iusto architecto? Nam maiores, veritatis est illo ullam eaque eveniet numquam iusto voluptates impedit alias nemo porro blanditiis quibusdam corporis et harum delectus obcaecati voluptatum at officia deserunt illum tempora. Harum corrupti laudantium repellat repellendus nihil adipisci officia assumenda, dolor saepe, minima molestias vitae unde? Ullam facilis molestias consectetur eos!
-    </p>
+{% for row in restrictions %}
+
+<div class="books">
+    <table border="2px">
+        <tr>
+            <td >
+                <img src="/static/pictures/{{row['book_picture']}}" alt="{{row['btitle']}}" width="120">
+            </td>
+            <td width="100%">
+                <div class="table_text"><b>{{row['btitle']}}</b> - {{row['descript']}}</div>
+            </td>
+        </tr>
+    </table>
 </div>
+
+{% endfor %}
+
 
 {% endblock %}

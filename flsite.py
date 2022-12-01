@@ -48,13 +48,13 @@ def get_db():
 def index():
     return redirect(url_for('recommended'))
 
-
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('index.html', css_link='styles.css', menu=dbase.getMenu())
+    results = dbase.all_books_function()
+    return render_template('index.html' , menu=dbase.getMenu(), restrictions=results)
 
 
 #  Закрытие соединения с базой данных  #
@@ -104,29 +104,40 @@ def register():
 def newbook():
     db = get_db()
     dbase = FDataBase(db)
+    post_req = request.args.get('edit')
 
-    # Добавление книги #
-    if request.method == 'POST':
-        print(request.form)
-        if len(request.form['title']) != 0 and len(request.form['descript']) != 0:
-            dbase.newbook_function(request.form['title'], request.form['author'],
-                                   request.form['year'], request.form['number'], request.form['descript'], )
+    
+    print(f"edit: {request.args.get('edit')}")
+
+        # POST запрос - применение редактирования книги #
+    if post_req != None and request.method == 'POST':
+        print('# POST запрос - применение редактирования книги #')
+
+        # Добавление книги #
+    elif post_req == None and request.method == 'POST':
+        print('# Добавление книги #')
+        
+        if len(request.form['btitle']) != 0 and len(request.form['descript']) != 0:
+
+            dbase.newbook_function(request.form['btitle'], request.form['author'], request.form['year'], 
+            request.form['number'], request.form['descript'], request.form['book_picture'])
 
             flash('Книга добавлена', category='success')
         else:
             flash('Ошибка добавления книги', category='error')
 
         # GET запрос на редактирование книги #
-    elif request.method == 'GET' and request.args.get('edit') != None:
-        edit = request.args.get('edit')
+    elif post_req != None and request.method == 'GET' :
+        print('# GET запрос на редактирование книги #')
 
-        results = dbase.search_book_function(edit)
+        results = dbase.search_book_function(post_req)
 
-        return render_template('newbook.html', title='Editbook', edit=edit, results=results,
-                               header_title='Редактирование книги', button='Изменить', inputs=dbase.get_inputs_newbook())
+        return render_template('newbook.html', title='Editbook', edit=int(post_req), 
+        valuelist = dbase.value_list(post_req), inputs=dbase.get_inputs_newbook())
 
-    return render_template('newbook.html', title='Newbook',
-                           header_title='Добавить книгу', button='Добавить', inputs=dbase.get_inputs_newbook())
+
+
+    return render_template('newbook.html', title='Newbook', inputs=dbase.get_inputs_newbook())
 
 
 @app.route('/booklist', methods=["POST", "GET"])
