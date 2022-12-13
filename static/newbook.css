@@ -8,12 +8,12 @@ html{
     background-size:cover;
     height:100%;    
   }
-   body {
+  body {
     background-color:transparent;
   }
 
   .form{
-    padding:50px 0;
+    padding:10px 0;
   }
   .form h3{
     text-align: center;
@@ -21,7 +21,7 @@ html{
   }
   .form form{
     max-width:800px;
-    padding:50px 70px;
+    padding: 50px 60px;
     border-radius:10px;
     box-shadow:4px 4px 10px rgba(0, 0, 0, 0.2);
     background-color:#fff;
@@ -40,19 +40,20 @@ html{
     color: #fff;
   }
     
-   .btn-add:hover{
+  .btn-add:hover{
     box-shadow: 2px 2px 7px black;
     background: #4191fa;
    }
-  .book_name, .book_author, .book_year, .book_count, .book_descript{
+  input{
     margin-bottom: 6px;
+    size: 20ch;
   }
 
-   .back{
+  .back{
     margin-top: 10px;
     margin-right: 3px;
    }
-   .history_back{
+  .history_back{
     color: black;
     text-decoration: none;
     background: none;
@@ -61,4 +62,23 @@ html{
   .history_back:hover{
     text-decoration: underline;
     background-color: rgba(128, 128, 128, 0.47); 
+  }
+  .upload{
+    line-height: 0;
+    overflow: hidden;
+  }
+  #fileElem {
+    /*display: none;*/
+  }
+  .button {
+    width: 9em;
+    display: inline-block;
+    padding: 10px;
+    background: #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  .button:hover {
+    background: #ddd;
   }

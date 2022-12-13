@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+
+<style>
+    .textarea{
+        background-color:rgb(255, 228, 196);
+    }
+</style>
+
+{% for row in results %}
+{% if id %}
+<table>
+    <tr>
+        <td><img src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" width="250"></td>
+        
+        <td>
+            <textarea class="textarea" name="descript" cols="60" rows="12" >{{row['descript']}}</textarea>
+        </td>
+
+    </tr>
+</table>
+
+{% else %}
+{{id}}
+<div>Ничего</div>
+
+{% endif %}
+{% endfor %}
+
+
+{% endblock %}

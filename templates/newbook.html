@@ -6,16 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='newbook.css' )}}" type="text/css">
-
+    <script src="/static/drag-n-drop.js"></script>
 </head>
-
 
 <body>
     <div class="form">
         {% for cat, msg in get_flashed_messages(True) %}
             <div class="flash {{cat}}" style="text-align: center; 
-                                        font-size: 14pt; background: rgb(164, 164, 164);
-                                        border-radius:10px">{{msg}}</div>
+            font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
         {% endfor %}
 
         <form action="/newbook" method="post">
@@ -25,50 +23,54 @@
                 <h3>Редактировать<br>книгу</h3>
 
                 {% for p in valuelist %}
-                    <div></div>
                     <div class="input">
-                        <input name="btitle" type="text" placeholder="Название книги" value="{{p['btitle']}}">
+                        <input class = 'btitle' name="btitle" type="text" placeholder="Название книги" value="{{p['btitle']}}">
                     </div>
                     <div class="input">
-                        <input name="author" type="text" placeholder="Автор" value="{{p['author']}}">
+                        <input class = 'author' name="author" type="text" placeholder="Автор" value="{{p['author']}}">
                     </div>
                     <div class="input">
-                        <input name="year" type="text" placeholder="Год выпуска" value="{{p['year']}}">
+                        <input class = 'year' name="year" type="text" placeholder="Год выпуска" value="{{p['year']}}">
                     </div>
                     <div class="input">
-                        <input name="number" type="text" placeholder="Количество" value="{{p['number']}}">
+                        <input class = 'number' name="number" type="text" placeholder="Количество" value="{{p['number']}}">
                     </div>
                     <div class="input">
-                        <input name="descript" type="text" placeholder="Описание" value="{{p['descript']}}">
+                        <input class = 'descript' name="descript" type="text" placeholder="Описание" value="{{p['descript']}}">
                     </div>
                     <div>
-                        <input name="book_picture" type="text" placeholder="Название картинки" value="{{p['book_picture']}}">
+                        <input class = 'book_picture' name="book_picture" type="text" placeholder="Название картинки" value="{{p['book_picture']}}">
                     </div>
                 {% endfor %}
                 <div class="create_btn">
-                    <button class="btn-add" type="submit">Изменить</button>
+                    <button class="btn-add" type="submit" value="{{edit}}">Изменить</button>
                 </div>
-
 
             {% else %}
                 <title>Newbook</title>
                 <h3>Добавить книгу</h3>
+
                 {% for p in inputs %}
                     <div class="{{p.class}}">
-                        <input name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
+                        <input class="{{p.class}}" name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
                     </div>
                 {% endfor %}
+                
+                <div id="drop-area">
+                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*">
+
+                <label class="button" for="fileElem" style="margin-left: 3%; text-align: center;">Загрузить картинку</label>
+                </div>
+
                 <div class="create_btn">
                     <button class="btn-add" type="submit">Добавить</button>
                 </div>
+            
             {% endif %}
-
-
-
+        
             <div class="back">
                 <a class="history_back" href="/">Назад</a>
             </div>
-
         </form>
     </div>
 </body>

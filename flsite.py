@@ -9,11 +9,12 @@ from FDataBase import FDataBase
 
 dotenv.load_dotenv('.env')
 
-# Обработка глобальных переменных #
+# Константы #
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
+MAX_CONTENT_LENGTH = 1200*1800
 
-# Создание приложение и настройка конфига # os.environ['SECRET_KEY']
+# Создание приложения и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config.from_object(__name__)
@@ -53,8 +54,8 @@ def index():
 def recommended():
     db = get_db()
     dbase = FDataBase(db)
-    results = dbase.all_books_function()
-    return render_template('index.html' , menu=dbase.getMenu(), restrictions=results)
+
+    return render_template('index.html' , menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
 #  Закрытие соединения с базой данных  #
@@ -106,7 +107,6 @@ def newbook():
     dbase = FDataBase(db)
     post_req = request.args.get('edit')
 
-    
     print(f"edit: {request.args.get('edit')}")
 
         # POST запрос - применение редактирования книги #
@@ -114,15 +114,12 @@ def newbook():
         print('# POST запрос - применение редактирования книги #')
 
         # Добавление книги #
-    elif post_req == None and request.method == 'POST':
+    elif request.method == 'POST':
         print('# Добавление книги #')
-        
+        print(request.form)
         if len(request.form['btitle']) != 0 and len(request.form['descript']) != 0:
-
             dbase.newbook_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'], request.form['book_picture'])
-
-            flash('Книга добавлена', category='success')
+            request.form['number'], request.form['descript'] ,request.form['book_picture'])       
         else:
             flash('Ошибка добавления книги', category='error')
 
@@ -130,21 +127,16 @@ def newbook():
     elif post_req != None and request.method == 'GET' :
         print('# GET запрос на редактирование книги #')
 
-        results = dbase.search_book_function(post_req)
-
         return render_template('newbook.html', title='Editbook', edit=int(post_req), 
-        valuelist = dbase.value_list(post_req), inputs=dbase.get_inputs_newbook())
+        valuelist = dbase.value_list(post_req), inputs=dbase.get_placeholder_newbook())
 
-
-
-    return render_template('newbook.html', title='Newbook', inputs=dbase.get_inputs_newbook())
+    return render_template('newbook.html', title='Newbook', inputs=dbase.get_placeholder_newbook())
 
 
 @app.route('/booklist', methods=["POST", "GET"])
 def booklist():
     db = get_db()
     dbase = FDataBase(db)
-    results = dbase.all_books_function()
 
     # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:
@@ -152,7 +144,7 @@ def booklist():
         del_id = request.form['id']
         dbase.delete_book_function(del_id)  # Функция удаления #
 
-        # Обработчик поиска #
+    # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
 
         book_search = request.form['search_btn']
@@ -161,13 +153,24 @@ def booklist():
         if results == None:
             flash('Книга не найдена', category='error')
             return render_template('booklist.html', menu=dbase.getMenu())
+        return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
 
-    else:
-        print(request.form)
-        print('Типо ни одно условие не соблюдено')
 
-    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
+@app.route('/book_card', methods=['GET','POST'])
+def book_card():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == 'GET':
+        id = int(request.args.get('id'))
+        print(request.args)
+
+        return render_template('book_card.html', menu=dbase.getMenu(), id = id,
+            title = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
+
+    return render_template('book_card.html', menu=dbase.getMenu(), 
+        title = "Ничего нет")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=DEBUG)

@@ -44,13 +44,29 @@ a:hover{
 .btn-edit:hover, .popup:hover{
     box-shadow: 0px 0px 3px black;
 }
+.QR{
+    border-radius: 2px;
+    
+}
+.QR:hover{
+    box-shadow: 0px 0px 3px black;
+}
+x-field{
+display:inline;
+position:relative;
+}
+x-field .close {
+position:absolute;
+padding:0 5px;
+right:0;
+}
 </style>
 
 
 <script>
     // Когда пользователь нажимает на <div>, открыть popup
-    function myFunction() {
-        var popup = document.getElementById("myPopup");
+    function myFunction(id) {
+        var popup = document.getElementById(id);
         popup.classList.toggle("show");
     }
 </script>
@@ -58,7 +74,12 @@ a:hover{
 <form action="/booklist" method="post">
     <div class="search">
         Введите запрос:   
-        <input name="search_btn" type="text" placeholder="введите фильтр" id="search">
+        <x-field>
+            <input name="search_btn" placeholder="введите фильтр" type="text" id = "search">
+            <span class="close" onclick="this.previousElementSibling.value = ''">
+            &times;
+            </span>
+        </x-field>        
         <button class='btn-search' type="submit">поиск</button>
     </div>
 </form>
@@ -83,12 +104,16 @@ a:hover{
         <td>{{row["dt_string"]}}</td>
         <td>
             <form action="/newbook" method="GET">
-                <button class="btn-edit"name="edit" value='{{row["id"]}}'>✎</button>
+                <button class="btn-edit" name="edit" value='{{row["id"]}}'>✎</button>
             </form>
         </td>
+        <td><form action="/book_card" method="GET"></form>
+            <a href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=/book_card?id={{row['id']}}" download><button class='QR'name="qr" value='{{row["id"]}}'>Сделать QR-код</button></a>
+        </td>
+        
         <td>
-            <div class="popup" onclick="myFunction()"><button>✖</button>
-                <span class="popuptext" id="myPopup">Вы уверены что хотите удалить?
+            <div class="popup" onclick="myFunction('{{row[0]}}')"><button>✖</button>
+                <span class="popuptext" id="{{row['id']}}">Вы уверены что хотите удалить?
                     <form action="/booklist" method="POST">
                         <button>Нет</button>
                         <button name="id" value='{{row["id"]}}'>Да</button>
