@@ -138,6 +138,9 @@ def booklist():
     db = get_db()
     dbase = FDataBase(db)
 
+    post_req = request.args.get('qr')
+    print(post_req)
+
     # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:
         print(request.form)
@@ -146,6 +149,7 @@ def booklist():
 
     # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
+        print(request.form)
 
         book_search = request.form['search_btn']
         results = dbase.search_book_function(book_search)  # Функция поиска #        
@@ -155,7 +159,14 @@ def booklist():
             return render_template('booklist.html', menu=dbase.getMenu())
         return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
 
-
+    # Создание QR кода #
+    elif request.method == 'GET' and post_req != None:
+        print(request.form)
+        link = dbase.QR_maker(post_req)
+        print('Качнём:', link)
+        return render_template('booklist.html', menu=dbase.getMenu(),
+            restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
+    print('Ничего')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 @app.route('/book_card', methods=['GET','POST'])
@@ -165,7 +176,7 @@ def book_card():
     if request.method == 'GET':
         id = int(request.args.get('id'))
         print(request.args)
-
+         
         return render_template('book_card.html', menu=dbase.getMenu(), id = id,
             title = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
 
@@ -174,3 +185,5 @@ def book_card():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=DEBUG)
+
+# https://api.qrserver.com/v1/create-qr-code/?format=jpg&data=http://192.168.0.133:5000/book_card?id={{row['id']}}

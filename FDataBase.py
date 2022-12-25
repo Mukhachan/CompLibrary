@@ -141,17 +141,17 @@ class FDataBase:
                 print('Ошибка чтения из БД с ключом edit (books)')
 
 
-    def QR_maker():
+    def QR_maker(self, id):
         '''
         Функция принимает в себя Данные о книге, а так же номер её экземпляра. 
         На основе входных данных создаётся QR-код, содержащий ссылку на страницу с книгой. 
         
         в GET-части запроса должен быть ID книги и номер экземпляра книги
         '''
-        data = "https://pythonist.ru/"
-        # имя конечного файла
-        filename = "site.png"
-        # генерируем qr-код
+        data = "http://192.168.0.133:5000/book_card?id="+ id
+        filename = f"book_{id}.png"
+
         img = qrcode.make(data)
-        # сохраняем img в файл
         img.save(f"static\pictures\{filename}")
+        
+        return f"static\pictures\{filename}"

@@ -107,8 +107,17 @@ right:0;
                 <button class="btn-edit" name="edit" value='{{row["id"]}}'>✎</button>
             </form>
         </td>
-        <td><form action="/book_card" method="GET"></form>
-            <a href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=/book_card?id={{row['id']}}" download><button class='QR'name="qr" value='{{row["id"]}}'>Сделать QR-код</button></a>
+        <td>
+
+            {% if row["id"] == qr %}
+            <a href="{{link}}" download="">
+                <button class='QR'name="qr" value='{{row["id"]}}'>Скачать QR-код</button>
+            </a>
+            {% else %}
+            <a href="/booklist?qr={{row['id']}}">
+                <button class='QR' name="qr" value='{{row["id"]}}'>Создать QR-код</button>
+            </a>
+            {% endif %}
         </td>
         
         <td>
