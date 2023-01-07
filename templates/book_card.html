@@ -1,24 +1,30 @@
 {% extends 'base.html' %}
-
 {% block content %}
 {{ super() }}
 
 <style>
     .textarea{
-        background-color:rgb(255, 228, 196);
+        background-color:rgb(255, 237, 216);
+    }
+    title{
+        margin: auto;
     }
 </style>
+
+<form action="input">
+    <div class="title">
+        <input type="text" value="{{titlet}}">
+    </div>
 
 {% for row in results %}
 {% if id %}
 <table>
     <tr>
         <td><img src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" width="250"></td>
-        
         <td>
-            <textarea class="textarea" name="descript" cols="60" rows="12" >{{row['descript']}}</textarea>
+            <input type="descript"><textarea class="textarea" name="descript" cols="60" rows="12" >{{row['descript']}}</textarea>
         </td>
-
+        
     </tr>
 </table>
 
@@ -29,5 +35,6 @@
 {% endif %}
 {% endfor %}
 
+</form>
 
 {% endblock %}

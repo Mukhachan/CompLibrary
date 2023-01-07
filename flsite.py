@@ -12,7 +12,6 @@ dotenv.load_dotenv('.env')
 # Константы #
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
-MAX_CONTENT_LENGTH = 1200*1800
 
 # Создание приложения и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
@@ -166,24 +165,24 @@ def booklist():
         print('Качнём:', link)
         return render_template('booklist.html', menu=dbase.getMenu(),
             restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
+
     print('Ничего')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+
 
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
     db = get_db()
     dbase = FDataBase(db)
-    if request.method == 'GET':
-        id = int(request.args.get('id'))
-        print(request.args)
+    print(request.args.get('edit'))
+    if request.method == 'GET' and request.args.get('edit') != None:
+        id = int(request.args.get('edit'))
          
         return render_template('book_card.html', menu=dbase.getMenu(), id = id,
-            title = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
+            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
 
     return render_template('book_card.html', menu=dbase.getMenu(), 
-        title = "Ничего нет")
+        title = "Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=DEBUG)
-
-# https://api.qrserver.com/v1/create-qr-code/?format=jpg&data=http://192.168.0.133:5000/book_card?id={{row['id']}}
