@@ -67,9 +67,8 @@ html{
     line-height: 0;
     overflow: hidden;
   }
-  #fileElem {
-    /*display: none;*/
-  }
+
+  
   .button {
     width: 9em;
     display: inline-block;

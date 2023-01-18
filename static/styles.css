@@ -8,6 +8,10 @@ html, body{
   margin-right: 5%;
 }
 
+.image{
+  width: 250px;
+  }
+
 .header_body {
   list-style: none;
   margin: 8px 0 5px;
@@ -63,6 +67,9 @@ html, body{
   .header_body a {
     padding: 25px 0 20px; 
     margin: 0 30px;
+  }
+  .image{
+    width: 150px;
   }
 }
 
