@@ -4,38 +4,94 @@
 
 <style>
     .textarea{
-        background-color:rgb(255, 237, 216);
+        height: 390px;
+        
+        background-color:rgb(255, 255, 255);
+        resize: none;
     }
     title{
         margin: auto;
     }
+    .button{
+        float: right;  
+        background-color: white;
+        margin: auto;
+        width: 8em;
+        
+        padding: 3px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-right: 5px;
+        text-align: center;
+        
+    }
+    .upload{
+    display: none;
+    overflow: hidden;
+  }
+    .button-edit {
+        background-color: white;
+        margin: auto;
+        width: 8em;
+        display: inline-block;
+        padding: 3px;
+        cursor: pointer;
+        
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-left: 25%; 
+        text-align: center;
+    }
+    .button-edit:hover , .button:hover {
+        background: #ddd;
+    }
+    .image{
+        
+        padding: auto;
+        
+    }
+
 </style>
 
+<div class="form">
 <form action="input">
-    <div class="title">
-        <input type="text" value="{{titlet}}">
-    </div>
+        <div class="title">
+            <input type="text" style='width: 30%;' value="{{titlet}}">
+        </div>
 
-{% for row in results %}
-{% if id %}
-<table>
-    <tr>
-        <td>
-            <img src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" width="250">
-        </td>
-        <td>
-            <textarea class="textarea" name="descript" cols="60" rows="12" >{{row['descript']}}</textarea>
-        </td>
-    </tr>
-</table>
+    {% for row in results %}
+    {% if id %}
+    <table border="1px" style="margin: auto;">
+        <tr>
+            <td>
+                <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
+            </td>
+            <td>
+                <textarea class="textarea" name="descript" cols="60">{{row['descript']}}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>                
+                <div id="drop-area">
+                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*">
+                    <label class="button-edit" for="fileElem">Изменить картинку</label>
+                </div>
+            </td>
+            <td >
+                <button class="button" value='{{row["id"]}}' type="submit">Сохранить</button>
+            </td>
+        </tr>
+    </table>
 
-{% else %}
-{{id}}
-<div>Ничего</div>
+    {% else %}
+    {{id}}
+    <div>Ничего</div>
 
-{% endif %}
-{% endfor %}
+    {% endif %}
+    {% endfor %}
 
 </form>
+</div>
 
 {% endblock %}

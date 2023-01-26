@@ -155,4 +155,3 @@ class FDataBase:
         img.save(f"static\pictures\{filename}")
         
         return f"static\pictures\{filename}"
-        
