@@ -5,83 +5,118 @@
 <style>
     .textarea{
         height: 390px;
-        
+        width: 100%;
+
         background-color:rgb(255, 255, 255);
         resize: none;
     }
     title{
         margin: auto;
     }
-    .button{
+    .button-save{
         float: right;  
-        background-color: white;
         margin: auto;
         width: 8em;
+        
         
         padding: 3px;
         cursor: pointer;
         border-radius: 5px;
-        border: 1px solid #ccc;
+        border: 1px solid rgb(97, 97, 97);
         margin-right: 5px;
         text-align: center;
-        
     }
     .upload{
     display: none;
     overflow: hidden;
-  }
+    }
     .button-edit {
         background-color: white;
         margin: auto;
-        width: 8em;
+        width: 10em;
         display: inline-block;
         padding: 3px;
         cursor: pointer;
         
         border-radius: 5px;
         border: 1px solid #ccc;
-        margin-left: 25%; 
+        margin-left: 20%; 
         text-align: center;
     }
-    .button-edit:hover , .button:hover {
+    .button-edit:hover , .button-save:hover {
         background: #ddd;
     }
     .image{
-        
-        padding: auto;
-        
+        padding: 0%;        
     }
-
+    .number, .year{
+        width: 100%;
+    }
+    .numbers{
+        width: 80px;
+    }
+    .flash_cat{
+        margin: auto; 
+        margin-top: 10px; 
+        margin-bottom: 10px;
+        text-align: center; 
+        width: 50%;
+        font-size: 14pt; 
+        background: rgb(81, 255, 0); 
+        border-radius:10px
+    }
 </style>
 
+{% for cat, msg in get_flashed_messages(True) %}
+{% if cat == 'success' %}
+<div class="flash_cat" style="background-color: rgb(11, 204, 11);">{{msg}}</div>
+{% elif cat == 'error' %}
+<div class="flash_cat" style="background-color: red;">{{msg}}</div>
+
+{% endif %}
+{% endfor %}
+
 <div class="form">
-<form action="input">
-        <div class="title">
-            <input type="text" style='width: 30%;' value="{{titlet}}">
+<form action="/book_card?edit={{id}}" method="post" enctype="multipart/form-data">
+        <div class="title" style="margin-bottom: 8px;">
+            <input type="text" style='width: 30%;' name='btitle' value="{{titlet}}">
+            <input type="text" style='width: 30%;' name='author' value="{{author}}">            
         </div>
 
     {% for row in results %}
     {% if id %}
     <table border="1px" style="margin: auto;">
-        <tr>
-            <td>
-                <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
+    <tr>
+        <td>
+            <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
+        </td>
+        <div class="psevdo_div">
+            <td style="width: 55%;">
+                <textarea class="textarea" name="descript" >{{row['descript']}}</textarea>
             </td>
-            <td>
-                <textarea class="textarea" name="descript" cols="60">{{row['descript']}}</textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>                
-                <div id="drop-area">
-                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*">
-                    <label class="button-edit" for="fileElem">Изменить картинку</label>
-                </div>
-            </td>
-            <td >
-                <button class="button" value='{{row["id"]}}' type="submit">Сохранить</button>
-            </td>
-        </tr>
+        </div>
+        <td>
+        <table style="margin: auto;">
+            <tr>
+                <td class="numbers"><input class='number' type="number" name="number" value="{{row['number']}}"></td>
+            </tr>
+            <tr>
+                <td class="numbers"><input class='year' type="number" name="year" value="{{row['year']}}"></td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+    <tr>
+        <td>                
+            <div id="drop-area">
+                <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*">
+                <label class="button-edit" for="fileElem" >Изменить картинку</label>
+            </div>
+        </td>
+        <td>
+            <button class="button-save" value='{{row["id"]}}' type="submit">Сохранить</button>
+        </td>
+    </tr>
     </table>
 
     {% else %}

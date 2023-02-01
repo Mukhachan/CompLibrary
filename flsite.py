@@ -177,9 +177,30 @@ def book_card():
     print(request.args.get('edit'))
     if request.method == 'GET' and request.args.get('edit') != None:
         id = int(request.args.get('edit'))
-         
-        return render_template('book_card.html', menu=dbase.getMenu(), id = id,
+
+        print(list(dbase.search_book_function(id)[0])) 
+
+        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
+            author = dbase.search_book_function(id)[0][2],
             titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
+            
+    elif request.method == 'POST':
+        print("Запрос на редактирование книги")
+        print(request.form)
+        
+
+        id = int(request.args.get('edit'))
+        if request.form['book_picture'] == '':
+            
+            dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
+            request.form['number'], request.form['descript'], list(dbase.search_book_function(id)[0])[8], id)
+        else:
+            dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
+            request.form['number'], request.form['descript'], request.form['book_picture'], id)            
+
+        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
+            author = dbase.search_book_function(id)[0][2],
+            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))        
 
     return render_template('book_card.html', menu=dbase.getMenu(), 
         title = "Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")

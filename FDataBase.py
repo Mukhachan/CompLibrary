@@ -67,9 +67,30 @@ class FDataBase:
             print('Ошибка чтения БД (books)')
         return ['Пустота']
 
+
+    def update_book_function(self, btitle, author, year, number, descript, book_picture, book_id):
+        '''
+        Функция принимает в себя ID книги, а также все обновлённые данные и применяет их 
+        для записи с соответствующим ID в базе данных. 
+        '''
+        try:
+            self.__cur.execute("""UPDATE books SET btitle = ?, author = ?, year = ?, number = ?,
+                                descript = ?, book_picture = ? WHERE id == ?""",
+                (btitle, author, year, number, descript, book_picture, book_id))
+                                                         
+            self.__db.commit()
+            flash('Произошло что-то хорошее!', category='success')
+            
+        except sqlite3.Error as e:
+
+            flash('Загляни в консоль. Там чё-то случилось', category='error')
+            print('Произошла какая-то ошибка. Наши полномочия всё')
+            print(e)
+
+
     def newbook_function(self, btitle, author, year, number, descript, book_picture):
         '''Принимает характеристики книги и создаёт новую запись в бд'''
-        
+
 
         def convert_to_binary_data(filename):
             '''Преобразование данных в бинарный вид'''
