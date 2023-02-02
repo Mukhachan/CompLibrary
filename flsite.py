@@ -3,8 +3,9 @@ import dotenv
 
 import sqlite3
 
-from flask import Flask, render_template, request, g, redirect, url_for, flash
+from flask import Flask, render_template, request, g, redirect, url_for, flash, send_from_directory
 from FDataBase import FDataBase
+from werkzeug.utils import secure_filename
 
 
 dotenv.load_dotenv('.env')
@@ -12,11 +13,17 @@ dotenv.load_dotenv('.env')
 # Константы #
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
+UPLOAD_FOLDER = '/static/pictures'
+ALLOWED_EXTENSIONS = {'png', 'webp', 'jpeg', 'jpg'}
+MAX_LENGTH = 2 * 1000 * 2000
+MAX_CONTENT_PATH = ''
 
 # Создание приложения и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config.from_object(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = MAX_LENGTH
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
@@ -98,6 +105,9 @@ def register():
         print(request.form)
     return render_template('register.html')
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
@@ -116,9 +126,19 @@ def newbook():
     elif request.method == 'POST':
         print('# Добавление книги #')
         print(request.form)
+        print(request.files)
+
+        if 'book_picture' not in request.files:
+            flash('Обязательно добавьте картинку', category='error')
+        else:
+
+            file = request.files['book_picture']
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            print(file)
+
         if len(request.form['btitle']) != 0 and len(request.form['descript']) != 0:
             dbase.newbook_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'] ,request.form['book_picture'])       
+            request.form['number'], request.form['descript'])       
         else:
             flash('Ошибка добавления книги', category='error')
 
@@ -187,9 +207,13 @@ def book_card():
     elif request.method == 'POST':
         print("Запрос на редактирование книги")
         print(request.form)
-        
+        print(request.files)
 
         id = int(request.args.get('edit'))
+
+        file = request.files['book_picture']
+        file.save(file.filename)
+
         if request.form['book_picture'] == '':
             
             dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 

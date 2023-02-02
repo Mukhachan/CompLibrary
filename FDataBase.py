@@ -88,7 +88,7 @@ class FDataBase:
             print(e)
 
 
-    def newbook_function(self, btitle, author, year, number, descript, book_picture):
+    def newbook_function(self, btitle, author, year, number, descript):
         '''Принимает характеристики книги и создаёт новую запись в бд'''
 
 
@@ -99,14 +99,14 @@ class FDataBase:
                 blob_data = file.read()
             return blob_data
         
-        picture_name = book_picture    
-        book_picture = convert_to_binary_data(book_picture)
+        # picture_name = book_picture    
+        # book_picture = convert_to_binary_data(book_picture)
         
         try:
             dt = datetime.datetime.now()
             dt_string = dt.strftime("%d/%m/%Y %H:%M:%S")
-            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
-                               (btitle, author, year, number, descript, dt_string, book_picture, picture_name))
+            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ? )",
+                               (btitle, author, year, number, descript, dt_string, '12', '12345'))
             self.__db.commit()
         except sqlite3.Error as e:
             print("Ошибка добавления книги в БД: " + str(e))

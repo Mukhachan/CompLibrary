@@ -16,7 +16,7 @@
             font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
         {% endfor %}
 
-        <form action="/newbook" method="post">
+        <form action="/newbook" method="post" enctype="multipart/form-data">
             
             {% if edit %}
                 <title>Editbook</title>
@@ -57,7 +57,7 @@
                 {% endfor %}
                 
                 <div id="drop-area">
-                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*">
+                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*" value="Upload">
 
                 <label class="button" for="fileElem" style="margin-left: 3%; text-align: center;">Загрузить картинку</label>
                 </div>
