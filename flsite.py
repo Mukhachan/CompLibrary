@@ -194,11 +194,9 @@ def booklist():
 def book_card():
     db = get_db()
     dbase = FDataBase(db)
-    print(request.args.get('edit'))
+
     if request.method == 'GET' and request.args.get('edit') != None:
         id = int(request.args.get('edit'))
-
-        print(list(dbase.search_book_function(id)[0])) 
 
         return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
             author = dbase.search_book_function(id)[0][2],
@@ -206,19 +204,21 @@ def book_card():
             
     elif request.method == 'POST':
         print("Запрос на редактирование книги")
-        print(request.form)
-        print(request.files)
+        print('\n',request.form)
+        print(request.files,'\n')
 
         id = int(request.args.get('edit'))
 
-        file = request.files['book_picture']
-        file.save(file.filename)
 
         if request.form['book_picture'] == '':
-            
+            print('\nНЕТ КАРТИНКИ\n')
+
             dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'], list(dbase.search_book_function(id)[0])[8], id)
+            request.form['number'], request.form['descript'], list(dbase.search_book_function(id)[0])[::-1][0], id)
         else:
+            file = request.files['book_picture']
+
+            print('Название картинки: ', request.form['book_picture'], '\n')
             dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
             request.form['number'], request.form['descript'], request.form['book_picture'], id)            
 

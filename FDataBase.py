@@ -67,7 +67,6 @@ class FDataBase:
             print('Ошибка чтения БД (books)')
         return ['Пустота']
 
-
     def update_book_function(self, btitle, author, year, number, descript, book_picture, book_id):
         '''
         Функция принимает в себя ID книги, а также все обновлённые данные и применяет их 
@@ -87,27 +86,16 @@ class FDataBase:
             print('Произошла какая-то ошибка. Наши полномочия всё')
             print(e)
 
-
-    def newbook_function(self, btitle, author, year, number, descript):
+    def newbook_function(self, btitle, author, year, number, descript, book_picture):
         '''Принимает характеристики книги и создаёт новую запись в бд'''
 
-
-        def convert_to_binary_data(filename):
-            '''Преобразование данных в бинарный вид'''
-
-            with open(f'static\pictures\{filename}', 'rb') as file:
-                blob_data = file.read()
-            return blob_data
-        
-        # picture_name = book_picture    
-        # book_picture = convert_to_binary_data(book_picture)
-        
         try:
             dt = datetime.datetime.now()
             dt_string = dt.strftime("%d/%m/%Y %H:%M:%S")
-            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ? )",
-                               (btitle, author, year, number, descript, dt_string, '12', '12345'))
+            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)",
+                               (btitle, author, year, number, descript, dt_string, book_picture))
             self.__db.commit()
+
         except sqlite3.Error as e:
             print("Ошибка добавления книги в БД: " + str(e))
             flash('Ошибка добавления книги', category='error')
