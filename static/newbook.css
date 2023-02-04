@@ -66,6 +66,7 @@ html{
   .upload{
     line-height: 0;
     overflow: hidden;
+    display: none;
   }
   
   .button {

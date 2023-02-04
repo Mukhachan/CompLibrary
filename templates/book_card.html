@@ -2,6 +2,8 @@
 {% block content %}
 {{ super() }}
 
+<script src="/static/book_picture_name.js"></script>
+
 <style>
     .textarea{
         height: 390px;
@@ -67,36 +69,6 @@
     }
 </style>
 
-<script>
-function myFunction(){
-  var x = document.getElementById("fileElem");
-  var txt = "";
-  if ('files' in x) {
-    if (x.files.length == 0) {
-      txt = "Select one or more files.";
-    } else {
-      for (var i = 0; i < x.files.length; i++) {
-        var file = x.files[i];
-        if ('name' in file) {
-          txt += file.name;
-        }
-      }
-    }
-  } 
-  else {
-    if (x.value == "") {
-      txt += "Select one or more files.";
-    } else {
-      txt += "The files property is not supported by your browser!";
-      txt  += "<br>The path of the selected file: " + x.value; // If the browser does not support the files property, it will return the path of the selected file instead. 
-    }
-  }
-  document.getElementById("demo").innerHTML = txt;
-  document.getElementById("inp").value = txt;
-}
-
-</script>
-
 {% for cat, msg in get_flashed_messages(True) %}
 {% if cat == 'success' %}
 <div class="flash_cat" style="background-color: rgb(11, 204, 11);">{{msg}}</div>
@@ -140,9 +112,9 @@ function myFunction(){
         <td>                
             <div id="drop-area">
                 <input class="upload" type="file" name="book_picture" id="fileElem" 
-                            accept="image/*" onchange="myFunction()">
+                            accept="image/*" onchange="myFunction()" value="Upload">
                 <label class="button-edit" for="fileElem" >Изменить картинку</label>
-                <p id="demo" ></p>
+                <p id="demo"></p>
                 <input type="text" name="book_picture" style="display: none;" id="inp">
             </div>
         </td>

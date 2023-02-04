@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='newbook.css' )}}" type="text/css">
     <script src="/static/drag-n-drop.js"></script>
+    <script src="/static/book_picture_name.js"></script>
+
 </head>
 
 <body>
@@ -16,62 +18,33 @@
             font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
         {% endfor %}
 
-        <form action="/newbook" method="post" enctype="multipart/form-data">
-            
-            {% if edit %}
-                <title>Editbook</title>
-                <h3>Редактировать<br>книгу</h3>
-
-                {% for p in valuelist %}
-                    <div class="input">
-                        <input class = 'btitle' name="btitle" type="text" placeholder="Название книги" value="{{p['btitle']}}">
-                    </div>
-                    <div class="input">
-                        <input class = 'author' name="author" type="text" placeholder="Автор" value="{{p['author']}}">
-                    </div>
-                    <div class="input">
-                        <input class = 'year' name="year" type="text" placeholder="Год выпуска" value="{{p['year']}}">
-                    </div>
-                    <div class="input">
-                        <input class = 'number' name="number" type="text" placeholder="Количество" value="{{p['number']}}">
-                    </div>
-                    <div class="input">
-                        <input class = 'descript' name="descript" type="text" placeholder="Описание" value="{{p['descript']}}">
-                    </div>
-                    <div>
-                        <input class = 'book_picture' name="book_picture" type="text" placeholder="Название картинки" value="{{p['book_picture']}}">
-                    </div>
-                {% endfor %}
-                <div class="create_btn">
-                    <button class="btn-add" type="submit" value="{{edit}}">Изменить</button>
-                </div>
-
-            {% else %}
-                <title>Newbook</title>
-                <h3>Добавить книгу</h3>
-
-                {% for p in inputs %}
-                    <div class="{{p.class}}">
-                        <input class="{{p.class}}" name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}">
-                    </div>
-                {% endfor %}
-                
-                <div id="drop-area">
-                    <input class="upload" type="file" name="book_picture" id="fileElem" accept="image/*" value="Upload">
-
-                <label class="button" for="fileElem" style="margin-left: 3%; text-align: center;">Загрузить картинку</label>
-                </div>
-
-                <div class="create_btn">
-                    <button class="btn-add" type="submit">Добавить</button>
-                </div>
-            
-            {% endif %}
-        
-            <div class="back">
-                <a class="history_back" href="/">Назад</a>
+  
+    <form action="/newbook" method="post" enctype="multipart/form-data">
+        <title>Newbook</title>
+        <h3>Добавить книгу</h3>
+              
+        {% for p in inputs %}
+            <div class="{{p.class}}">
+                <input class="{{p.class}}" name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}" required>
             </div>
-        </form>
+        {% endfor %}
+        
+        <div id="drop-area">
+            <input class="upload" type="file" name="book_picture" id="fileElem" 
+                        accept="image/*" onchange="myFunction()" value="Upload">
+            <label class="button" for="fileElem" style="margin-left: 3%; text-align: center;">Загрузить картинку</label>
+            <p id="demo"></p>
+            <input type="text" name="book_picture" style="display: none;" id="inp">
+        </div>
+
+        <div class="create_btn">
+            <button class="btn-add" type="submit">Добавить</button>
+        </div>
+        <div class="back">
+            <a class="history_back" href="/">Назад</a>
+        </div>
+    </form>        
+
     </div>
 </body>
 
