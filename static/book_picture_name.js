@@ -13,14 +13,6 @@ function myFunction(){
         }
       }
     } 
-    else {
-      if (x.value == "") {
-        txt += "Select one or more files.";
-      } else {
-        txt += "The files property is not supported by your browser!";
-        txt  += "<br>The path of the selected file: " + x.value; 
-      }
-    }
     document.getElementById("demo").innerHTML = txt;
     document.getElementById("inp").value = txt;
   }
