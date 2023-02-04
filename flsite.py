@@ -13,7 +13,7 @@ dotenv.load_dotenv('.env')
 # Константы #
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
-UPLOAD_FOLDER = '/static/pictures'
+UPLOAD_FOLDER = 'static/pictures/'
 ALLOWED_EXTENSIONS = {'png', 'webp', 'jpeg', 'jpg'}
 MAX_LENGTH = 2 * 1000 * 2000
 MAX_CONTENT_PATH = ''
@@ -114,40 +114,27 @@ def allowed_file(filename):
 def newbook():
     db = get_db()
     dbase = FDataBase(db)
-    post_req = request.args.get('edit')
-
-    print(f"edit: {request.args.get('edit')}")
-
-        # POST запрос - применение редактирования книги #
-    if post_req != None and request.method == 'POST':
-        print('# POST запрос - применение редактирования книги #')
 
         # Добавление книги #
-    elif request.method == 'POST':
+    if request.method == 'POST':
         print('# Добавление книги #')
         print(request.form)
         print(request.files)
 
         if 'book_picture' not in request.files:
             flash('Обязательно добавьте картинку', category='error')
-        else:
 
+        else:
+            # Сохранение картинки в файловой системе 
             file = request.files['book_picture']
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             print(file)
-
-        if len(request.form['btitle']) != 0 and len(request.form['descript']) != 0:
-            dbase.newbook_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'])       
-        else:
-            flash('Ошибка добавления книги', category='error')
-
-        # GET запрос на редактирование книги #
-    elif post_req != None and request.method == 'GET' :
-        print('# GET запрос на редактирование книги #')
-
-        return render_template('newbook.html', title='Editbook', edit=int(post_req), 
-        valuelist = dbase.value_list(post_req), inputs=dbase.get_placeholder_newbook())
+            # Создание новой записи в бд
+            dbase.newbook_function(btitle = request.form['btitle'], author = request.form['author'], 
+            year = request.form['year'], number = request.form['number'], 
+            descript = request.form['descript'], book_picture = request.form['book_picture'])
 
     return render_template('newbook.html', title='Newbook', inputs=dbase.get_placeholder_newbook())
 
@@ -194,29 +181,25 @@ def booklist():
 def book_card():
     db = get_db()
     dbase = FDataBase(db)
-
-    if request.method == 'GET' and request.args.get('edit') != None:
-        id = int(request.args.get('edit'))
-
-        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = dbase.search_book_function(id)[0][2],
-            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))
-            
-    elif request.method == 'POST':
+       
+    if request.method == 'POST':
         print("Запрос на редактирование книги")
         print('\n',request.form)
         print(request.files,'\n')
 
         id = int(request.args.get('edit'))
 
-
         if request.form['book_picture'] == '':
             print('\nНЕТ КАРТИНКИ\n')
 
+            # Обновление записи без новой картинки 
             dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
             request.form['number'], request.form['descript'], list(dbase.search_book_function(id)[0])[::-1][0], id)
         else:
+            # Сохранение картинки в файловой системе 
             file = request.files['book_picture']
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             print('Название картинки: ', request.form['book_picture'], '\n')
             dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
