@@ -3,7 +3,7 @@ import dotenv
 
 import sqlite3
 
-from flask import Flask, render_template, request, g, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, g, redirect, url_for, flash
 from FDataBase import FDataBase
 from werkzeug.utils import secure_filename
 
@@ -14,7 +14,6 @@ dotenv.load_dotenv('.env')
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
 UPLOAD_FOLDER = 'static/pictures/'
-ALLOWED_EXTENSIONS = {'png', 'webp', 'jpeg', 'jpg'}
 MAX_LENGTH = 2 * 1000 * 2000
 MAX_CONTENT_PATH = ''
 
@@ -105,9 +104,6 @@ def register():
         print(request.form)
     return render_template('register.html')
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
@@ -182,12 +178,18 @@ def book_card():
     db = get_db()
     dbase = FDataBase(db)
        
-    if request.method == 'POST':
+    id = int(request.args.get('edit'))
+
+    if request.method == 'GET':
+        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
+            author = dbase.search_book_function(id)[0][2],
+            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))  
+
+    elif request.method == 'POST':
         print("Запрос на редактирование книги")
         print('\n',request.form)
         print(request.files,'\n')
 
-        id = int(request.args.get('edit'))
 
         if request.form['book_picture'] == '':
             print('\nНЕТ КАРТИНКИ\n')
