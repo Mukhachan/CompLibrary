@@ -2,16 +2,13 @@ function myFunction(){
     var x = document.getElementById("fileElem");
     var txt = "";
     if ('files' in x) {
-      if (x.files.length == 0) {
-        txt = "Select one or more files.";
-      } else {
-        for (var i = 0; i < x.files.length; i++) {
-          var file = x.files[i];
-          if ('name' in file) {
-            txt += file.name;
-          }
+      for (var i = 0; i < x.files.length; i++) {
+        var file = x.files[i];
+        if ('name' in file) {
+          txt += file.name;
         }
       }
+      
     } 
     document.getElementById("demo").innerHTML = txt;
     document.getElementById("inp").value = txt;

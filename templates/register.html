@@ -5,22 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href ="{{ url_for('static', filename='register.css' )}}" type="text/css" >
+
     <title>Authentification</title>
 </head>
 <body>
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}" style="text-align: center; 
+    font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
+    {% endfor %}
+
     <div class="registration-cssave">
-        <form action="/auth" method="post">
+        <form action="/register" method="post">
             <h3 class="text-center">Форма регистрации</h3>
+
             <div class="form-group">
-                <input class="form-control item" type="text" name="username" minlength="10" maxlength="10" placeholder="Номер карты" required>
+                <p class="js_message"></p>
+                <input class="form-control item" type="email" name="email" id="username" placeholder="Email" required>
             </div>
 
             <div class="form-group">
-                <input class="form-control item" type="email" name="username" id="username" placeholder="Email" required>
+                <input class="form-control item" type="text" name="card" minlength="10" maxlength="10" placeholder="Номер карты" required>
             </div>
 
             <div class="form-group">
-                <input class="form-control item" type="password" name="Пароль" minlength="6" maxlength="14" id="password" placeholder="Пароль" required>
+                <input class="form-control item" type="password" name="password" minlength="6" maxlength="14" id="password" placeholder="Пароль" required>
             </div>
 
             <div class="form-group">

@@ -48,6 +48,14 @@ def get_db():
         g.link_db = connect_db()
     return g.link_db
 
+dbase = None
+@app.before_request
+def before_request():
+    """ Соединение с бд """
+    global dbase 
+    db = get_db()
+    dbase = FDataBase(db)
+
 
 #  Редирект на страницу рекомендации  #
 @app.route('/')
@@ -57,8 +65,6 @@ def index():
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
-    db = get_db()
-    dbase = FDataBase(db)
 
     return render_template('index.html' , menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
@@ -74,8 +80,7 @@ def closed_db(error):
 #  Обработка ошибок  #
 @app.errorhandler(404)
 def PageNotFound(error):
-    db = get_db()
-    dbase = FDataBase(db)
+
     return render_template('page404.html', title='Страница не найдена',
                            menu=dbase.getMenu(), css_link='styles.css')
 
@@ -83,8 +88,7 @@ def PageNotFound(error):
 #  Страница "о библиотеке"  #
 @app.route('/about')
 def about():
-    db = get_db()
-    dbase = FDataBase(db)
+
     return render_template('about.html', menu=dbase.getMenu())
 
 
@@ -93,23 +97,38 @@ def about():
 def auth():
     if request.method == 'POST':
         print(request.form)
+        user = request.form['user']
+        password = request.form['password']
 
+        if dbase.auth_user(user, password):
+            flash('Успешная авторизация', category='success')
+        else:
+            flash('Неверный логин или пароль', category='error')
     return render_template('auth.html')
 
 
 #  рут регистрации  #
 @app.route('/register', methods=["POST", "GET"])
 def register():
+    print(request.form)
+
     if request.method == 'POST':
-        print(request.form)
+        email = request.form['email']
+        card = request.form['card']
+        password = request.form['password']
+        dbase.add_user(email, card, password)
+
+        
     return render_template('register.html')
+
+
 
 
 #  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
 def newbook():
-    db = get_db()
-    dbase = FDataBase(db)
+
+    books = dbase.booklist_function()
 
         # Добавление книги #
     if request.method == 'POST':
@@ -132,13 +151,12 @@ def newbook():
             year = request.form['year'], number = request.form['number'], 
             descript = request.form['descript'], book_picture = request.form['book_picture'])
 
-    return render_template('newbook.html', title='Newbook', inputs=dbase.get_placeholder_newbook())
+    return render_template('newbook.html', title='Newbook', 
+            inputs=dbase.get_placeholder_newbook(), books = books)
 
-
+#  Страница со списком книг  #
 @app.route('/booklist', methods=["POST", "GET"])
 def booklist():
-    db = get_db()
-    dbase = FDataBase(db)
 
     post_req = request.args.get('qr')
     print(post_req)
@@ -172,12 +190,10 @@ def booklist():
     print('Ничего')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
-
+#  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
-    db = get_db()
-    dbase = FDataBase(db)
-       
+  
     id = int(request.args.get('edit'))
 
     if request.method == 'GET':

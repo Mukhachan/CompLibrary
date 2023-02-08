@@ -2,6 +2,7 @@ import sqlite3
 import datetime
 from flask import flash
 import qrcode
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class FDataBase:
     def __init__(self, db):
@@ -54,7 +55,6 @@ class FDataBase:
         """Возвращает все книги из таблицы books
         в виде великого и ужасного списка словарей(кортежей)
         """
-        
 
         try:
             self.__cur.execute("""SELECT * FROM books""")
@@ -149,7 +149,6 @@ class FDataBase:
             except:
                 print('Ошибка чтения из БД с ключом edit (books)')
 
-
     def QR_maker(self, id):
         '''
         Функция принимает в себя Данные о книге, а так же номер её экземпляра. 
@@ -164,3 +163,37 @@ class FDataBase:
         img.save(f"static\pictures\{filename}")
         
         return f"static\pictures\{filename}"
+
+    def add_user(self, email, card, password):
+        """ Добавление нового юзера.
+            Хеширование его пароля.
+        """
+        password = generate_password_hash(password)
+        
+        try:
+            self.__cur.execute("insert into users VALUES(NULL, ?, ?, ?)", (email, card, password))
+            self.__db.commit()
+            flash('Вы успешно зарегестрированы', category='success')
+
+        except sqlite3.Error as e:
+            flash('Возникла непредвиденная ошибка', category='error')
+            return False
+        
+        return True
+
+
+    def auth_user(self, user, password):
+        """ Авторизация юзера """
+        print(user)
+        if "@" in user:
+            """ Ищем по email """
+            self.__cur.execute(f'SELECT * from users WHERE email = {user}')
+
+        elif user.isdigit():
+            """ Ищем по карте """
+            self.__cur.execute('SELECT * from users WHERE card = ?', (user,))
+
+        result = self.__cur.fetchall()
+        hash_psw = list(result[0])[3]
+
+        return check_password_hash(hash_psw, password)

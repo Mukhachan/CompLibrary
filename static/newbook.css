@@ -81,3 +81,7 @@ html{
   .button:hover {
     background: #ddd;
   }
+  .selector{
+    margin-bottom: 10px;
+    margin: auto;
+  }

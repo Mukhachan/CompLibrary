@@ -1,9 +1,11 @@
-import qrcode
-# пример данных
-data = "https://pythonist.ru/"
-# имя конечного файла
-filename = "site.png"
-# генерируем qr-код
-img = qrcode.make(data)
-# сохраняем img в файл
-img.save(filename)
+from FDataBase import *
+
+
+def get_db():
+    '''Соединение с бд, если оно ещё не установлено '''
+    if not hasattr(g, 'link_dv'):
+        g.link_db = connect_db()
+    return g.link_db
+
+
+fdata = FDataBase()

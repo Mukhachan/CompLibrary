@@ -12,6 +12,7 @@
 
 <body>
     <div class="form">
+        <!-- Это уведомлялка -->
         {% for cat, msg in get_flashed_messages(True) %}
             <div class="flash {{cat}}" style="text-align: center; 
             font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
@@ -20,13 +21,15 @@
     <form action="/newbook" method="post" enctype="multipart/form-data">
         <title>Newbook</title>
         <h3>Добавить книгу</h3>
-              
+
+
+        <!-- Генерирует инпуты с помощью жинжа 2 -->
         {% for p in inputs %}
             <div class="{{p.class}}">
                 <input class="{{p.class}}" name="{{p.name}}" type="{{p.type}}" placeholder="{{p.placeholder}}" required>
             </div>
         {% endfor %}
-        
+        <!-- Добавлениt книги -->
         <div id="drop-area">
             <input class="upload" type="file" name="book_picture" id="fileElem" 
                         accept="image/*" onchange="myFunction()" value="Upload">
@@ -35,6 +38,7 @@
             <input type="text" name="book_picture" style="display: none;" id="inp">
         </div>
 
+        <!-- Кнопочки -->
         <div class="create_btn">
             <button class="btn-add" type="submit">Добавить</button>
         </div>
