@@ -121,7 +121,7 @@ class FDataBase:
             Если Входное == str, то производится поиск по названию или автору
             если Входное == int, то поиск по ID книги 
         '''
-        
+
         
         if type(book_search) == str:
             print('(STR) _SEARCH "' + book_search.lower() + '"')
@@ -169,18 +169,27 @@ class FDataBase:
             Хеширование его пароля.
         """
         password = generate_password_hash(password)
+        self.__cur.execute("SELECT * from users WHERE email = ?", (email,))
+
+        if len(self.__cur.fetchall()) > 0:
+            flash('Такая почта уже зарегистрирована', category='error')
+            return False
         
+        self.__cur.execute("SELECT * from users WHERE card = ?", (card,))
+        if len(self.__cur.fetchall()) > 0:
+            flash('Номер карты уже используется', category='error')
+            return False
+
         try:
-            self.__cur.execute("insert into users VALUES(NULL, ?, ?, ?)", (email, card, password))
+            self.__cur.execute(f"insert into users VALUES(NULL, {email}, {card}, {password})")
             self.__db.commit()
             flash('Вы успешно зарегестрированы', category='success')
+            return True
 
         except sqlite3.Error as e:
             flash('Возникла непредвиденная ошибка', category='error')
             return False
-        
-        return True
-
+           
 
     def auth_user(self, user, password):
         """ Авторизация юзера """
@@ -191,7 +200,7 @@ class FDataBase:
 
         elif user.isdigit():
             """ Ищем по карте """
-            self.__cur.execute('SELECT * from users WHERE card = ?', (user,))
+            self.__cur.execute(f'SELECT * from users WHERE card = {user}')
 
         result = self.__cur.fetchall()
         hash_psw = list(result[0])[3]

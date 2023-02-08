@@ -9,9 +9,13 @@
     <title>Authentification</title>
 </head>
 <body>
+
     {% for cat, msg in get_flashed_messages(True) %}
-    <div class="flash {{cat}}" style="text-align: center; 
-    font-size: 14pt; background: rgb(164, 164, 164); border-radius:10px">{{msg}}</div>
+    {% if cat == 'success' %}
+    <div class="flash_cat" style="text-align: center; font-size: 14pt; border-radius:10px; background-color: rgb(11, 204, 11);">{{msg}}</div>
+    {% elif cat == 'error' %}
+    <div class="flash_cat" style="text-align: center; font-size: 14pt; border-radius:10px; background-color: red;">{{msg}}</div>
+    {% endif %}
     {% endfor %}
 
     <div class="registration-cssave">
