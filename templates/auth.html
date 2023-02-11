@@ -9,20 +9,25 @@
 </head>
 <body>
     <div class="registration-cssave">
+        {% for cat, msg in get_flashed_messages(True) %}
+        {% if cat == 'success' %}
+            <div class="flash_cat" style="text-align: center; font-size: 14pt; border-radius:10px; background-color: rgb(11, 204, 11);">{{msg}}</div>
+        {% elif cat == 'error' %}
+            <div class="flash_cat" style="text-align: center; font-size: 14pt; border-radius:10px; background-color: red;">{{msg}}</div>
+        {% endif %}
+        {% endfor %}  
+        
         <form action="/auth" method="post">
             <h3 class="text-center">Форма входа</h3>
             <div class="form-group">
                 <input class="form-control item" type="text" name="user" minlength="4"  id="username" placeholder="Номер карты/Email" required>
             </div>
-
             <div class="form-group">
                 <input class="form-control item" type="password" name="password" minlength="6" id="password" placeholder="Пароль" required>
             </div>
-
             <div class="form-group">
                 <center><button class="btn-create-account" type="submit">Вход в аккаунт</button></center>
             </div>
-            
             <div>
                 <center><a href="register" class="reg">Нет аккаунта?</a></center>
                 <center><a href="#" class="history_back">Забыли пароль?</a></center>

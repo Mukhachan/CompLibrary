@@ -127,7 +127,7 @@ class FDataBase:
             print('(STR) _SEARCH "' + book_search.lower() + '"')
             req = '%' + book_search.lower() + '%'
             print('- ' + req)
-
+            
             try:
                 self.__cur.execute("""
                 SELECT * FROM books WHERE mylower(btitle) LIKE ? or mylower(author) LIKE ?""", (req, req))
@@ -171,22 +171,27 @@ class FDataBase:
         password = generate_password_hash(password)
         self.__cur.execute("SELECT * from users WHERE email = ?", (email,))
 
-        if len(self.__cur.fetchall()) > 0:
+        if len(self.__cur.fetchall()) > 0: # Проверяем зарегестрирована ли почта
             flash('Такая почта уже зарегистрирована', category='error')
             return False
-        
         self.__cur.execute("SELECT * from users WHERE card = ?", (card,))
-        if len(self.__cur.fetchall()) > 0:
+        if len(self.__cur.fetchall()) > 0: # Проверяем зарегестрирована ли карта
             flash('Номер карты уже используется', category='error')
             return False
 
+        role = 'student'
+        dt = datetime.datetime.now()
+        dt_string = dt.strftime("%d/%m/%Y %H:%M:%S") # Добавляем время создания юзера
+
         try:
-            self.__cur.execute(f"insert into users VALUES(NULL, {email}, {card}, {password})")
+            self.__cur.execute("insert into users VALUES(NULL, ?, ?, ?, ?, ?)", 
+                                (role, email, card, password, dt_string))
             self.__db.commit()
             flash('Вы успешно зарегестрированы', category='success')
             return True
 
-        except sqlite3.Error as e:
+        except sqlite3.Error as error:
+            print(error)
             flash('Возникла непредвиденная ошибка', category='error')
             return False
            
@@ -196,13 +201,30 @@ class FDataBase:
         print(user)
         if "@" in user:
             """ Ищем по email """
-            self.__cur.execute(f'SELECT * from users WHERE email = {user}')
+            self.__cur.execute('SELECT * from users WHERE email = ?', (user,))
 
         elif user.isdigit():
             """ Ищем по карте """
-            self.__cur.execute(f'SELECT * from users WHERE card = {user}')
+            self.__cur.execute('SELECT * from users WHERE card = ?', (user,))
 
         result = self.__cur.fetchall()
-        hash_psw = list(result[0])[3]
-
-        return check_password_hash(hash_psw, password)
+        hash_psw = (list(result[0])[4])
+        
+        if check_password_hash(hash_psw, password):
+            return list(result[0])[0]
+        else:    
+            return False
+    
+    def getUser(self, user_id):
+        try:
+            self.__cur.execute(f"SELECT * FROM users WHERE id = {user_id} LIMIT 1")
+            res = self.__cur.fetchone()
+            if not res:
+                print("Пользователь не найден")
+                return False 
+ 
+            return res
+        except sqlite3.Error as e:
+            print("Ошибка получения данных из БД "+str(e))
+ 
+        return False

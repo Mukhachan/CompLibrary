@@ -25,9 +25,11 @@ CREATE TABLE IF NOT EXISTS placeholder (
 
 CREATE TABLE IF NOT EXISTS users (
     id integer PRIMARY KEY AUTOINCREMENT,
+    role text NOT NULL,
     email text NOT NULL,
     card integer NOT NULL,
-    password integer NOT NULL
+    password integer NOT NULL,
+    dt_string integer NOT NULL
 );
 CREATE TABLE IF NOT EXISTS book_history (
     id_instance integer NOT NULL,

@@ -1,10 +1,10 @@
+
+
+
 {% extends 'base.html' %}
 
 {% block content %}
 {{ super() }}
-
-<div><a href="newbook">Добавить</a></div>
-<div><a href="/booklist">Список книг</a></div>
 
 <style>
     table{
@@ -18,8 +18,10 @@
     .table_text{
         margin-left: 10px;
     }
-
 </style>
+
+<div><a href="newbook">Добавить</a></div>
+<div><a href="/booklist">Список книг</a></div>
 
 {% for row in restrictions %}
 

@@ -7,6 +7,9 @@ from flask import Flask, render_template, request, g, redirect, url_for, flash
 from FDataBase import FDataBase
 from werkzeug.utils import secure_filename
 
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from UserLogin import UserLogin
+
 
 dotenv.load_dotenv('.env')
 
@@ -26,6 +29,16 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_LENGTH
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
+# Настройка приложения для регистрации #
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message = "Авторизуйтесь для доступа к закрытым страницам"
+login_manager.login_message_category = "success"
+
+@login_manager.user_loader
+def load_user(user_id):
+    print("load_user")
+    return UserLogin().fromDB(user_id, dbase)
 
 
 #  Создание, соединение и получение данных БД  #
@@ -65,7 +78,6 @@ def index():
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
-
     return render_template('index.html' , menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
@@ -102,8 +114,12 @@ def auth():
 
         if dbase.auth_user(user, password):
             flash('Успешная авторизация', category='success')
+            userlogin = UserLogin().create(user)
+            login_user(userlogin)
+            return redirect(url_for('recommended'))
         else:
             flash('Неверный логин или пароль', category='error')
+
     return render_template('auth.html')
 
 
@@ -118,10 +134,7 @@ def register():
         password = request.form['password']
         dbase.add_user(email, card, password)
 
-        
     return render_template('register.html')
-
-
 
 
 #  Страница добавления книги  #
