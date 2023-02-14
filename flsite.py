@@ -100,7 +100,6 @@ def PageNotFound(error):
 #  Страница "о библиотеке"  #
 @app.route('/about')
 def about():
-
     return render_template('about.html', menu=dbase.getMenu())
 
 

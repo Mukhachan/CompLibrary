@@ -18,4 +18,4 @@ class UserLogin:
  
     def get_id(self):
         print('__user', self.__user)
-        return int(self.__user['id'])
+        return str(self.__user['id'])

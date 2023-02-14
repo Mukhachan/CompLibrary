@@ -195,14 +195,12 @@ class FDataBase:
             flash('Возникла непредвиденная ошибка', category='error')
             return False
            
-
     def auth_user(self, user, password):
         """ Авторизация юзера """
         print(user)
         if "@" in user:
             """ Ищем по email """
             self.__cur.execute('SELECT * from users WHERE email = ?', (user,))
-
         elif user.isdigit():
             """ Ищем по карте """
             self.__cur.execute('SELECT * from users WHERE card = ?', (user,))
@@ -222,9 +220,9 @@ class FDataBase:
             if not res:
                 print("Пользователь не найден")
                 return False 
- 
             return res
+
         except sqlite3.Error as e:
-            print("Ошибка получения данных из БД "+str(e))
- 
+            print("Ошибка получения данных из БД " + str(e))
+
         return False
