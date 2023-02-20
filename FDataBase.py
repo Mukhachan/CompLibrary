@@ -188,6 +188,15 @@ class FDataBase:
                                 (role, email, card, password, dt_string))
             self.__db.commit()
             flash('Вы успешно зарегестрированы', category='success')
+
+            self.__cur.execute("SELECT id from users WHERE email = ?", (email,))
+            
+            res = self.__cur.fetchall()
+            res = list(res[0])[0]
+            print(res)
+
+            self.__cur.execute("insert into user_data VALUES(?, NULL, NULL, NULL, NULL)", (res,))
+            self.__db.commit()
             return True
 
         except sqlite3.Error as error:
@@ -213,6 +222,15 @@ class FDataBase:
         else:    
             return False
     
+    def get_user_data(self, user_id):
+        """
+        Берёт данные об ученике из таблицы user_data, используя user_id 
+        """
+        self.__cur.execute(f"SELECT * from user_data WHERE id = {user_id}")
+        res = self.__cur.fetchone()
+        return res
+
+
     def getUser(self, user_id):
         try:
             self.__cur.execute(f"SELECT * FROM users WHERE id = {user_id} LIMIT 1")
@@ -224,5 +242,19 @@ class FDataBase:
 
         except sqlite3.Error as e:
             print("Ошибка получения данных из БД " + str(e))
+
+        return False
+
+    def getUserByEmail(self, email):
+        try:
+            self.__cur.execute(f"SELECT * FROM users WHERE email = '{email}' LIMIT 1")
+            res = self.__cur.fetchone()
+            if not res:
+                print("Пользователь не найден")
+                return False
+
+            return res
+        except sqlite3.Error as e:
+            print("Ошибка получения данных из БД "+str(e))
 
         return False

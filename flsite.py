@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from UserLogin import UserLogin
 
+from time import sleep
 
 dotenv.load_dotenv('.env')
 
@@ -35,9 +36,11 @@ login_manager.login_view = 'login'
 login_manager.login_message = "Авторизуйтесь для доступа к закрытым страницам"
 login_manager.login_message_category = "success"
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    print("load_user")
+    print("load_user: ", user_id)
+    
     return UserLogin().fromDB(user_id, dbase)
 
 
@@ -54,6 +57,7 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
+    print('OK')
 
 def get_db():
     '''Соединение с бд, если оно ещё не установлено '''
@@ -78,6 +82,7 @@ def index():
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
+
     return render_template('index.html' , menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
@@ -102,6 +107,11 @@ def PageNotFound(error):
 def about():
     return render_template('about.html', menu=dbase.getMenu())
 
+@app.route('/profile')
+@login_required
+def profile():
+    #res = dbase.get_user_data(UserLogin().get_id())
+    return render_template('profile.html', menu=dbase.getMenu())
 
 #  рут авторизации  #
 @app.route('/auth', methods=["POST", "GET"])
@@ -111,10 +121,16 @@ def auth():
         user = request.form['user']
         password = request.form['password']
 
+        rm = True if request.form.get('remainme') else False
+
         if dbase.auth_user(user, password):
             flash('Успешная авторизация', category='success')
+
+            user = dbase.getUserByEmail(request.form['user'])
             userlogin = UserLogin().create(user)
-            login_user(userlogin)
+            login_user(userlogin, remember=rm)
+
+            sleep(1)
             return redirect(url_for('recommended'))
         else:
             flash('Неверный логин или пароль', category='error')
@@ -139,7 +155,6 @@ def register():
 #  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
 def newbook():
-
     books = dbase.booklist_function()
 
         # Добавление книги #
@@ -166,10 +181,10 @@ def newbook():
     return render_template('newbook.html', title='Newbook', 
             inputs=dbase.get_placeholder_newbook(), books = books)
 
+
 #  Страница со списком книг  #
 @app.route('/booklist', methods=["POST", "GET"])
 def booklist():
-
     post_req = request.args.get('qr')
     print(post_req)
 
@@ -202,10 +217,10 @@ def booklist():
     print('Ничего')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
+
 #  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
-  
     id = int(request.args.get('edit'))
 
     if request.method == 'GET':
@@ -241,6 +256,7 @@ def book_card():
 
     return render_template('book_card.html', menu=dbase.getMenu(), 
         title = "Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=DEBUG)

@@ -31,6 +31,15 @@ CREATE TABLE IF NOT EXISTS users (
     password integer NOT NULL,
     dt_string integer NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_data (
+    id integer NOT NULL,
+    name text NULL,
+    surname text NULL,
+    DOB integer NULL,
+    class integer NULL
+);
+
 CREATE TABLE IF NOT EXISTS book_history (
     id_instance integer NOT NULL,
     user_id integer NOT NULL,

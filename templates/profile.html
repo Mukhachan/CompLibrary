@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+<style>
+    .cont{
+    background: rgb(202, 202, 202);
+    
+    }
+
+</style>
+<div class='cont'>
+    {{current_user.get_id()}}
+    <div>
+        <p>Имя: </p>
+        <p>Фамилия: </p>
+        <p>Класс:    </p>
+    </div>
+
+</div>
+{% endblock %}
