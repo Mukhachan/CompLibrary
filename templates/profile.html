@@ -10,12 +10,15 @@
 
 </style>
 <div class='cont'>
-    {{current_user.get_id()}}
-    <div>
-        <p>Имя: </p>
-        <p>Фамилия: </p>
-        <p>Класс:    </p>
-    </div>
 
+    {% for res in res -%}
+    <div>
+        <p>Имя: {{res.name}}</p>
+        <p>Фамилия: {{res.surname}}</p>
+        <p>Дата рождения: {{res.DOB}}</p>
+        <p>Класс: {{res.class}}</p>
+    </div>
+    <div><a href="{{url_for('logout')}}">Выйти</a></div>
+    {% endfor %}
 </div>
 {% endblock %}

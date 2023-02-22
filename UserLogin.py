@@ -17,5 +17,4 @@ class UserLogin:
         return False
  
     def get_id(self):
-        print('__user', self.__user)
         return str(self.__user['id'])

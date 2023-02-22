@@ -32,7 +32,8 @@ app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
 # Настройка приложения для регистрации #
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.init_app(app)
+login_manager.login_view = 'auth'
 login_manager.login_message = "Авторизуйтесь для доступа к закрытым страницам"
 login_manager.login_message_category = "success"
 
@@ -82,8 +83,13 @@ def index():
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
+    if current_user.is_authenticated:
+        return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
+            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
-    return render_template('index.html' , menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+
+    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизироваться', 
+            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
 #  Закрытие соединения с базой данных  #
@@ -107,15 +113,28 @@ def PageNotFound(error):
 def about():
     return render_template('about.html', menu=dbase.getMenu())
 
+# Профиль пользователя
 @app.route('/profile')
 @login_required
 def profile():
-    #res = dbase.get_user_data(UserLogin().get_id())
-    return render_template('profile.html', menu=dbase.getMenu())
+    res = dbase.get_user_data(current_user.get_id())
+    return render_template('profile.html', menu=dbase.getMenu(), res = res)
+
+# Выход из сессии
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("Вы вышли из аккаунта", "success")
+    return redirect(url_for('auth'))
 
 #  рут авторизации  #
 @app.route('/auth', methods=["POST", "GET"])
 def auth():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+    
     if request.method == 'POST':
         print(request.form)
         user = request.form['user']

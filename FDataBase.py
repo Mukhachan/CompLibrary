@@ -227,9 +227,11 @@ class FDataBase:
         Берёт данные об ученике из таблицы user_data, используя user_id 
         """
         self.__cur.execute(f"SELECT * from user_data WHERE id = {user_id}")
-        res = self.__cur.fetchone()
-        return res
-
+        res = self.__cur.fetchall()
+        if res:
+            return res
+        else:
+            return None
 
     def getUser(self, user_id):
         try:
