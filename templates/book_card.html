@@ -78,6 +78,7 @@
 {% endif %}
 {% endfor %}
 
+{% if current_user.get_role() == 'admin' %}
 <div class="form">
 <form action="/book_card?edit={{id}}" method="post" enctype="multipart/form-data">
         <div class="title" style="margin-bottom: 8px;">
@@ -133,5 +134,17 @@
 
 </form>
 </div>
+
+{% elif current_user.get_role() == 'class' or current_user.get_role() == 'student' %}
+<div>
+    {% for row in results %}
+<table>
+    <td>
+        <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
+    </td>
+</table>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}

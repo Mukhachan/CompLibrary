@@ -65,6 +65,7 @@ def get_db():
         g.link_db = connect_db()
     return g.link_db
 
+# Соединение с бд и получение глобальной переменной #
 dbase = None
 @app.before_request
 def before_request():
@@ -72,7 +73,6 @@ def before_request():
     global dbase 
     db = get_db()
     dbase = FDataBase(db)
-
 
 #  Редирект на страницу рекомендации  #
 @app.route('/')
@@ -102,10 +102,8 @@ def closed_db(error):
 #  Обработка ошибок  #
 @app.errorhandler(404)
 def PageNotFound(error):
-
     return render_template('page404.html', title='Страница не найдена',
                            menu=dbase.getMenu(), css_link='styles.css')
-
 
 #  Страница "о библиотеке"  #
 @app.route('/about')
@@ -172,7 +170,11 @@ def register():
 
 #  Страница добавления книги  #
 @app.route('/newbook', methods=["POST", "GET"])
+@login_required
 def newbook():
+    if current_user.get_role() != 'admin':
+        return redirect('recommended')
+    
     books = dbase.booklist_function()
 
         # Добавление книги #
@@ -202,13 +204,13 @@ def newbook():
 
 #  Страница со списком книг  #
 @app.route('/booklist', methods=["POST", "GET"])
+@login_required
 def booklist():
-    post_req = request.args.get('qr')
-    print(post_req)
     if current_user.get_role() != 'admin':
-        return redirect(url_for("PageNotFound"))
+        return redirect('recommended')
 
 
+    post_req = request.args.get('qr')
     # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:
         print(request.form)
@@ -246,7 +248,7 @@ def book_card():
 
     if request.method == 'GET':
         return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = dbase.search_book_function(id)[0][2],
+            author = dbase.search_book_function(id)[0][2], 
             titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))  
 
     elif request.method == 'POST':

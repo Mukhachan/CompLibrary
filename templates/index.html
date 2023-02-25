@@ -15,6 +15,11 @@
     .table_text{
         margin-left: 10px;
     }
+    .view-button{
+        float: right; 
+        margin-right: 10px; 
+        text-decoration: none;
+    }
 </style>
 
 <div><a href="newbook">Добавить</a></div>
@@ -32,6 +37,11 @@
             <td width="100%">
                 <div class="table_text"><b>{{row['btitle']}}</b> - {{row['descript']}}</div>
             </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><a class="view-button" href="/book_card?edit={{row['id']}}" 
+                style="float: right; margin-right: 10px; text-decoration: none;">Посмотреть</a></td>
         </tr>
     </table>
     </div>
