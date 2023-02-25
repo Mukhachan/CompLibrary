@@ -41,7 +41,6 @@ login_manager.login_message_category = "success"
 @login_manager.user_loader
 def load_user(user_id):
     print("load_user: ", user_id)
-    
     return UserLogin().fromDB(user_id, dbase)
 
 
@@ -83,14 +82,14 @@ def index():
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
 def recommended():
+    
     if current_user.is_authenticated:
         return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
-    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизироваться', 
+    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
-
 
 #  Закрытие соединения с базой данных  #
 @app.teardown_appcontext
@@ -206,6 +205,9 @@ def newbook():
 def booklist():
     post_req = request.args.get('qr')
     print(post_req)
+    if current_user.get_role() != 'admin':
+        return redirect(url_for("PageNotFound"))
+
 
     # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:

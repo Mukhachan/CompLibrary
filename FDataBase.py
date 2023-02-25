@@ -25,18 +25,6 @@ class FDataBase:
             print('Ошибка чтения БД (menu)')
         return []
 
-    def value_list(self, book_id):
-        '''Возвращает значения книги для страницы редактирования'''
-        
-        
-        sql = '''SELECT * FROM books where id = ?'''
-        self.__cur.execute(sql, (book_id,))
-        res = self.__cur.fetchall()
-        if res:
-            print(f"Это вот то что получилось с бд: {list(res)}")
-            return res
-        return ['Пустота']
-
     def get_placeholder_newbook(self):
         '''Возвращет все плэйсхолдеры для страницы редактирования и добавления книги'''
         
@@ -165,7 +153,8 @@ class FDataBase:
         return f"static\pictures\{filename}"
 
     def add_user(self, email, card, password):
-        """ Добавление нового юзера.
+        """ 
+            Добавление нового юзера.
             Хеширование его пароля.
         """
         password = generate_password_hash(password)

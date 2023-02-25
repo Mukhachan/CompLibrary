@@ -15,6 +15,9 @@ class UserLogin:
  
     def is_anonymous(self):
         return False
- 
+
+    def get_role(self):
+        return str(self.__user['role'])
+
     def get_id(self):
         return str(self.__user['id'])

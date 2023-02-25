@@ -17,7 +17,18 @@
 </head>
 
 <body>
-    <div class="login"><a href="{{auth_link}}">{{auth_name}}</a></div>
+    {% if auth_name == 'Профиль' %}
+    <div class="login">
+        <a href="{{auth_link}}"><i class="fa fa-user" aria-hidden="true"></i> {{auth_name}}</a>
+    </div>
+    {% elif auth_name == 'Авторизация' %}
+    <div class="login">
+        <a href="{{auth_link}}">{{auth_name}}</a>
+    </div>    
+    {% else %}
+    
+    {% endif %}
+
     <div class="wrapper">
         {% block content -%}
 
