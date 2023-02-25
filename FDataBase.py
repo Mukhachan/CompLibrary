@@ -195,7 +195,7 @@ class FDataBase:
            
     def auth_user(self, user, password):
         """ Авторизация юзера """
-        print(user)
+        
         if "@" in user:
             """ Ищем по email """
             self.__cur.execute('SELECT * from users WHERE email = ?', (user,))

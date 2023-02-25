@@ -57,7 +57,7 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
-    print('OK')
+    print('DB connect is OK')
 
 def get_db():
     '''Соединение с бд, если оно ещё не установлено '''
@@ -133,7 +133,7 @@ def auth():
         return redirect(url_for('profile'))
     
     if request.method == 'POST':
-        print(request.form)
+        
         user = request.form['user']
         password = request.form['password']
 
@@ -157,7 +157,6 @@ def auth():
 #  рут регистрации  #
 @app.route('/register', methods=["POST", "GET"])
 def register():
-    print(request.form)
 
     if request.method == 'POST':
         email = request.form['email']
@@ -180,8 +179,6 @@ def newbook():
         # Добавление книги #
     if request.method == 'POST':
         print('# Добавление книги #')
-        print(request.form)
-        print(request.files)
 
         if 'book_picture' not in request.files:
             flash('Обязательно добавьте картинку', category='error')
@@ -192,7 +189,6 @@ def newbook():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            print(file)
             # Создание новой записи в бд
             dbase.newbook_function(btitle = request.form['btitle'], author = request.form['author'], 
             year = request.form['year'], number = request.form['number'], 
@@ -213,13 +209,12 @@ def booklist():
     post_req = request.args.get('qr')
     # Обработчик удаления книги #
     if request.method == 'POST' and 'id' in request.form:
-        print(request.form)
+
         del_id = request.form['id']
         dbase.delete_book_function(del_id)  # Функция удаления #
 
     # Обработчик поиска #
     elif request.method == 'POST' and 'search_btn' in request.form:
-        print(request.form)
 
         book_search = request.form['search_btn']
         results = dbase.search_book_function(book_search)  # Функция поиска #        
@@ -231,13 +226,12 @@ def booklist():
 
     # Создание QR кода #
     elif request.method == 'GET' and post_req != None:
-        print(request.form)
         link = dbase.QR_maker(post_req)
         print('Качнём:', link)
         return render_template('booklist.html', menu=dbase.getMenu(),
             restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
 
-    print('Ничего')
+    print('No book for view')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
@@ -257,9 +251,6 @@ def book_card():
 
     elif request.method == 'POST':
         print("Запрос на редактирование книги")
-        print('\n',request.form)
-        print(request.files,'\n')
-
 
         if request.form['book_picture'] == '':
             print('\nНЕТ КАРТИНКИ\n')
