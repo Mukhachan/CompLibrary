@@ -245,10 +245,14 @@ def booklist():
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
     id = int(request.args.get('edit'))
+    if login_required:
+        role = 'anonymous'
+    else:
+        role = current_user.get_role()
 
     if request.method == 'GET':
         return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = dbase.search_book_function(id)[0][2], 
+            author = dbase.search_book_function(id)[0][2], role = role,
             titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))  
 
     elif request.method == 'POST':
