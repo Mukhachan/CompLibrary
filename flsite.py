@@ -18,15 +18,12 @@ dotenv.load_dotenv('.env')
 DATABASE = '/tmp/flsite.db'
 DEBUG = True
 UPLOAD_FOLDER = 'static/pictures/'
-MAX_LENGTH = 2 * 1000 * 2000
-MAX_CONTENT_PATH = ''
 
 # Создание приложения и настройка конфига # os.environ['SECRET_KEY']
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = MAX_LENGTH
 
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'flsite.db')))
 
@@ -46,10 +43,10 @@ def load_user(user_id):
 
 #  Создание, соединение и получение данных БД  #
 def connect_db():
+    '''Соедиение с бд'''
     conn = sqlite3.connect(app.config['DATABASE'])
     conn.row_factory = sqlite3.Row
     return conn
-
 def create_db():
     '''Вспомогательная функция для создания таблиц бд'''
     db = connect_db()
@@ -58,13 +55,11 @@ def create_db():
     db.commit()
     db.close()
     print('DB connect is OK')
-
 def get_db():
     '''Соединение с бд, если оно ещё не установлено '''
     if not hasattr(g, 'link_dv'):
         g.link_db = connect_db()
     return g.link_db
-
 # Соединение с бд и получение глобальной переменной #
 dbase = None
 @app.before_request
@@ -73,24 +68,6 @@ def before_request():
     global dbase 
     db = get_db()
     dbase = FDataBase(db)
-
-#  Редирект на страницу рекомендации  #
-@app.route('/')
-def index():
-    return redirect(url_for('recommended'))
-
-#  Страница рекомендации (по сути главная)  #
-@app.route('/recommended')
-def recommended():
-    
-    if current_user.is_authenticated:
-        return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
-            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
-
-
-    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
-            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
-
 #  Закрытие соединения с базой данных  #
 @app.teardown_appcontext
 def closed_db(error):
@@ -98,6 +75,19 @@ def closed_db(error):
     if hasattr(g, 'link_db'):
         g.link_db.close()
 
+#  Редирект на страницу рекомендации  #
+@app.route('/')
+def index():
+    return redirect(url_for('recommended'))
+#  Страница рекомендации (по сути главная)  #
+@app.route('/recommended')
+def recommended():
+    if current_user.is_authenticated:
+        return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
+            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+
+    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
+            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 #  Обработка ошибок  #
 @app.errorhandler(404)

@@ -18,31 +18,69 @@
 - HTML
 - CSS
 - SQlite
-- JavaScript (Возможно в будущем)
+- JavaScript
 
 
 Возможности ролей (по возрастанию): 
-    Ученик: (Не приступал)
+    Ученик: (В разработке)
         - Просматривать список доступных книг
         - Брать книгу
         - Регистрироваться/авторизироваться
 
-    Классный руководитель: (Не приступал)
+    Классный руководитель: (В разработке)
         - Просматривать список доступных книг
         - Брать книгу
         - Регистрироваться/авторизироваться
         - Просматривать список должников своего класса
 
-    Библиотекарь: (В разработке)
+    Библиотекарь: (80%)
         - Имеет полный доступ к б/д с должниками и людьми взявшими книги
         - Всё что могут люди ниже ролью
 
 
-Столбцы БД:
-- id
-- btitle
-- author
-- year  (не ищется)
-- number (не ищется)
-- descript
-- dt_string
+Таблицы БД:
+    books:
+        - id
+        - btitle
+        - author
+        - year  (не ищется)
+        - number (не ищется)
+        - descript
+        - dt_string
+
+    book_history:
+        - id_instance
+        - user_id
+        - dt_string
+        - action
+
+    mainmenu:
+        - id
+        - title
+        - url
+
+    placeholder:
+        - id
+        - class
+        - name 
+        - type
+        - placeholder
+
+    sqlite_sequence:
+        - name
+        - seq 
+    
+    user_data:
+        - id
+        - name
+        - surname
+        - DOB
+        - class
+    
+    users:
+        - id
+        - role
+        - email
+        - card
+        - password
+        - dt_string
