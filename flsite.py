@@ -229,15 +229,13 @@ def booklist():
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
     id = int(request.args.get('edit'))
-    if login_required:
-        role = 'anonymous'
-    else:
-        role = current_user.get_role()
+    role = current_user.get_role() if login_required else 'anonymous'
 
+    author = dbase.search_book_function(id)[0][2]
+    titlet = list(dbase.search_book_function(id)[0])[1]
     if request.method == 'GET':
         return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = dbase.search_book_function(id)[0][2], role = role,
-            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))  
+            author = author, role = role, titlet = titlet, results=dbase.search_book_function(id))  
 
     elif request.method == 'POST':
         print("Запрос на редактирование книги")
@@ -259,8 +257,7 @@ def book_card():
             request.form['number'], request.form['descript'], request.form['book_picture'], id)            
 
         return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = dbase.search_book_function(id)[0][2],
-            titlet = list(dbase.search_book_function(id)[0])[1], results=dbase.search_book_function(id))        
+            author = author, titlet = titlet, results=dbase.search_book_function(id))        
 
     return render_template('book_card.html', menu=dbase.getMenu(), 
         title = "Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")

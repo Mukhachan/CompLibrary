@@ -139,15 +139,34 @@
 <div>
     {% for row in results %}
 <table>
-        <td>
-            <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
-        </td>
+        <tr>
+            <td>
+                <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
+                
+            </td>
+            <td style="float:left; width: 40%;">
+                <div>{{row['descript']}}</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+
+            </td>
+            <td>
+                <form action="/book_card?edit={{row['id']}}" method="GET">
+                    <button class="btn-rent" name="edit" value='{{row["id"]}}'>Арендовать</button>
+                </form>
+            </td>
+        </tr>
+
 </table>
     {% endfor %}
 </div>
 
 {% elif role == 'anonymous' %}
-Вам стоит <a href="/auth">авторизироваться</a>
+<div>
+    Вам стоит <a href="/auth">авторизироваться</a>
+</div>
 {% endif %}
 
 {% endblock %}
