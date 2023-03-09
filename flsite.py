@@ -1,18 +1,17 @@
 import os
-import dotenv
-
-import sqlite3
-
-from flask import Flask, render_template, request, g, redirect, url_for, flash
-from FDataBase import FDataBase
-from werkzeug.utils import secure_filename
-
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from UserLogin import UserLogin
-
 from time import sleep
 
+import sqlite3
+from flask import Flask, render_template, request, g, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+
+from FDataBase import FDataBase
+from UserLogin import UserLogin
+
+import dotenv
 dotenv.load_dotenv('.env')
+
 
 # Константы #
 DATABASE = '/tmp/flsite.db'
@@ -40,7 +39,6 @@ def load_user(user_id):
     print("load_user: ", user_id)
     return UserLogin().fromDB(user_id, dbase)
 
-
 #  Создание, соединение и получение данных БД  #
 def connect_db():
     '''Соедиение с бд'''
@@ -54,12 +52,13 @@ def create_db():
         db.cursor().executescript(f.read())
     db.commit()
     db.close()
-    print('DB connect is OK')
+    print('БД подключена')
 def get_db():
-    '''Соединение с бд, если оно ещё не установлено '''
-    if not hasattr(g, 'link_dv'):
+    '''Соединение с бд, если оно ещё не установлено'''
+    if 'link_db' not in g:
         g.link_db = connect_db()
     return g.link_db
+
 # Соединение с бд и получение глобальной переменной #
 dbase = None
 @app.before_request
@@ -68,11 +67,11 @@ def before_request():
     global dbase 
     db = get_db()
     dbase = FDataBase(db)
-#  Закрытие соединения с базой данных  #
+
 @app.teardown_appcontext
 def closed_db(error):
-    """Закрытие соединения"""
-    if hasattr(g, 'link_db'):
+    '''Закрытие соединения'''
+    if 'link_db' in g:
         g.link_db.close()
 
 #  Редирект на страницу рекомендации  #
@@ -85,8 +84,8 @@ def recommended():
     if current_user.is_authenticated:
         return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
-
-    return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
+    else:
+        return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 #  Обработка ошибок  #
@@ -166,27 +165,28 @@ def newbook():
     
     books = dbase.booklist_function()
 
-        # Добавление книги #
     if request.method == 'POST':
-        print('# Добавление книги #')
-
         if 'book_picture' not in request.files:
             flash('Обязательно добавьте картинку', category='error')
-
         else:
-            # Сохранение картинки в файловой системе 
             file = request.files['book_picture']
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            dbase.newbook_function(
+                btitle=request.form['btitle'],
+                author=request.form['author'],
+                year=request.form['year'],
+                number=request.form['number'],
+                descript=request.form['descript'],
+                book_picture=request.form['book_picture']
+            )
 
-            # Создание новой записи в бд
-            dbase.newbook_function(btitle = request.form['btitle'], author = request.form['author'], 
-            year = request.form['year'], number = request.form['number'], 
-            descript = request.form['descript'], book_picture = request.form['book_picture'])
-
-    return render_template('newbook.html', title='Newbook', 
-            inputs=dbase.get_placeholder_newbook(), books = books)
-
+    return render_template(
+        'newbook.html',
+        title='Newbook',
+        inputs=dbase.get_placeholder_newbook(),
+        books=books
+    )
 
 #  Страница со списком книг  #
 @app.route('/booklist', methods=["POST", "GET"])
@@ -194,7 +194,6 @@ def newbook():
 def booklist():
     if current_user.get_role() != 'admin':
         return redirect('recommended')
-
 
     post_req = request.args.get('qr')
     # Обработчик удаления книги #
@@ -221,47 +220,57 @@ def booklist():
         return render_template('booklist.html', menu=dbase.getMenu(),
             restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
 
-    print('No book for view')
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 
 #  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])
 def book_card():
-    id = int(request.args.get('edit'))
-    role = current_user.get_role() if login_required else 'anonymous'
+    id = int(request.args.get('edit')) if request.args.get('edit') else None
 
-    author = dbase.search_book_function(id)[0][2]
-    titlet = list(dbase.search_book_function(id)[0])[1]
-    if request.method == 'GET':
-        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = author, role = role, titlet = titlet, results=dbase.search_book_function(id))  
+    if id is None:
+        return render_template('book_card.html', menu=dbase.getMenu(), 
+                               title="Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
 
-    elif request.method == 'POST':
-        print("Запрос на редактирование книги")
+    if current_user.is_authenticated:
+        role = current_user.get_role()
+    else:
+        role = 'anonymous'
+    print(role)
 
-        if request.form['book_picture'] == '':
-            print('\nНЕТ КАРТИНКИ\n')
+    book_data = dbase.search_book_function(id)
+    if book_data:
+        author = book_data[0][2]
+        titlet = book_data[0][1]
 
-            # Обновление записи без новой картинки 
-            dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'], list(dbase.search_book_function(id)[0])[::-1][0], id)
-        else:
-            # Сохранение картинки в файловой системе 
-            file = request.files['book_picture']
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if request.method == 'GET':
+            return render_template('book_card.html', menu=dbase.getMenu(), id=id, author=author,
+                                   role=role, titlet=titlet, results=book_data)
 
-            print('Название картинки: ', request.form['book_picture'], '\n')
-            dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'], 
-            request.form['number'], request.form['descript'], request.form['book_picture'], id)            
+        elif request.method == 'POST':
+            print("Запрос на редактирование книги")
+            if request.form['book_picture'] == '':
+                print('\nНЕТ КАРТИНКИ\n')
 
-        return render_template('book_card.html', menu=dbase.getMenu(), id = id, 
-            author = author, titlet = titlet, results=dbase.search_book_function(id))        
+                # Обновление записи без новой картинки
+                dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'],
+                                           request.form['number'], request.form['descript'], book_data[-1], id)
+            else:
+                # Сохранение картинки в файловой системе
+                file = request.files['book_picture']
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-    return render_template('book_card.html', menu=dbase.getMenu(), 
-        title = "Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
+                print('Название картинки: ', request.form['book_picture'], '\n')
+                dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'],
+                                           request.form['number'], request.form['descript'], request.form['book_picture'], id)
 
+            return render_template('book_card.html', menu=dbase.getMenu(), id=id, author=author,
+                                   titlet=titlet, results=book_data)
+
+    else:
+        flash('Книга не найдена', 'error')
+        return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=DEBUG)

@@ -173,6 +173,7 @@ class FDataBase:
         dt_string = dt.strftime("%d/%m/%Y %H:%M:%S") # Добавляем время создания юзера
 
         try:
+            """ Создаём запись в таблице users """
             self.__cur.execute("insert into users VALUES(NULL, ?, ?, ?, ?, ?)", 
                                 (role, email, card, password, dt_string))
             self.__db.commit()
@@ -183,8 +184,9 @@ class FDataBase:
             res = self.__cur.fetchall()
             res = list(res[0])[0]
             print(res)
+            """ Создаём запись в таблице user_data с данными о пользователе """
 
-            self.__cur.execute("insert into user_data VALUES(?, NULL, NULL, NULL, NULL)", (res,))
+            self.__cur.execute("insert into user_data VALUES(?, ?, NULL, NULL, NULL, NULL)", (res, role))
             self.__db.commit()
             return True
 
