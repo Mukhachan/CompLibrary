@@ -1,0 +1,62 @@
+.textarea{
+    height: 390px;
+    width: 100%;
+
+    background-color:rgb(255, 255, 255);
+    resize: none;
+}
+title{
+    margin: auto;
+}
+.button-save{
+    float: right;  
+    margin: auto;
+    width: 8em;
+    
+    
+    padding: 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid rgb(97, 97, 97);
+    margin-right: 5px;
+    text-align: center;
+}
+.upload{
+    display: none;
+    overflow: hidden;
+}
+.button-edit {
+    background-color: white;
+    margin: auto;
+    width: 10em;
+    display: inline-block;
+    padding: 3px;
+    cursor: pointer;
+    
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 20%; 
+    text-align: center;
+}
+.button-edit:hover , .button-save:hover {
+    background: #ddd;
+}
+.image{
+    padding: 0%;        
+}
+.number, .year{
+    width: 100%;
+}
+.numbers{
+    width: 80px;
+}
+.flash_cat{
+    margin: auto; 
+    margin-top: 10px; 
+    margin-bottom: 10px;
+    text-align: center; 
+    width: 50%;
+    font-size: 14pt; 
+    background: rgb(81, 255, 0); 
+    border-radius:10px
+}

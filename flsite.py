@@ -10,8 +10,8 @@ from FDataBase import FDataBase
 from UserLogin import UserLogin
 
 import dotenv
-dotenv.load_dotenv('.env')
 
+dotenv.load_dotenv('.env')
 
 # Константы #
 DATABASE = '/tmp/flsite.db'
@@ -221,7 +221,6 @@ def booklist():
             restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
 
     return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
-
 
 #  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])

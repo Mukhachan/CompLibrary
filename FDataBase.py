@@ -110,7 +110,6 @@ class FDataBase:
             если Входное == int, то поиск по ID книги 
         '''
 
-        
         if type(book_search) == str:
             print('(STR) _SEARCH "' + book_search.lower() + '"')
             req = '%' + book_search.lower() + '%'
@@ -152,49 +151,48 @@ class FDataBase:
         
         return f"static\pictures\{filename}"
 
-    def add_user(self, email, card, password):
-        """ 
-            Добавление нового юзера.
-            Хеширование его пароля.
+    def add_user(self, email: str, card: str, password: str) -> bool:
+        """
+        Добавление нового пользователя.
+        Хеширование его пароля.
         """
         password = generate_password_hash(password)
-        self.__cur.execute("SELECT * from users WHERE email = ?", (email,))
+        self.__cur.execute("SELECT * FROM users WHERE email = ?", (email,))
 
-        if len(self.__cur.fetchall()) > 0: # Проверяем зарегестрирована ли почта
-            flash('Такая почта уже зарегистрирована', category='error')
-            return False
-        self.__cur.execute("SELECT * from users WHERE card = ?", (card,))
-        if len(self.__cur.fetchall()) > 0: # Проверяем зарегестрирована ли карта
-            flash('Номер карты уже используется', category='error')
+        if self.__cur.fetchone():
+            flash("Такая почта уже зарегистрирована", category="error")
             return False
 
-        role = 'student'
-        dt = datetime.datetime.now()
-        dt_string = dt.strftime("%d/%m/%Y %H:%M:%S") # Добавляем время создания юзера
+        self.__cur.execute("SELECT * FROM users WHERE card = ?", (card,))
+        if self.__cur.fetchone():
+            flash("Номер карты уже используется", category="error")
+            return False
+
+        role = "student"
+        dt_string = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         try:
             """ Создаём запись в таблице users """
-            self.__cur.execute("insert into users VALUES(NULL, ?, ?, ?, ?, ?)", 
-                                (role, email, card, password, dt_string))
+            self.__cur.execute(
+                "INSERT INTO users VALUES(NULL, ?, ?, ?, ?, ?)",
+                (role, email, card, password, dt_string),
+            )
             self.__db.commit()
-            flash('Вы успешно зарегестрированы', category='success')
+            flash("Вы успешно зарегистрированы", category="success")
 
-            self.__cur.execute("SELECT id from users WHERE email = ?", (email,))
-            
-            res = self.__cur.fetchall()
-            res = list(res[0])[0]
-            print(res)
             """ Создаём запись в таблице user_data с данными о пользователе """
-
-            self.__cur.execute("insert into user_data VALUES(?, ?, NULL, NULL, NULL, NULL)", (res, role))
+            user_id = self.__cur.lastrowid
+            self.__cur.execute(
+                "INSERT INTO user_data VALUES(?, ?, NULL, NULL, NULL, NULL)", (user_id, role)
+            )
             self.__db.commit()
             return True
 
         except sqlite3.Error as error:
             print(error)
-            flash('Возникла непредвиденная ошибка', category='error')
+            flash("Возникла непредвиденная ошибка", category="error")
             return False
-           
+
     def auth_user(self, user, password):
         """ Авторизация юзера """
         
