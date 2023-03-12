@@ -4,6 +4,8 @@ from flask import flash
 import qrcode
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from ImageCompressor import ImageCompressor as IC
+
 class FDataBase:
     def __init__(self, db):
         self.__db = db
@@ -75,7 +77,14 @@ class FDataBase:
             print(e)
 
     def newbook_function(self, btitle, author, year, number, descript, book_picture):
-        '''Принимает характеристики книги и создаёт новую запись в бд'''
+        '''Принимает характеристики книги и создаёт новую запись в бд
+           Также сжимает изображение, для этого используется отдельный класс ImageCompressor
+        '''
+
+        input_path = '/static/pictures/' + book_picture
+        output_path = '/static/pictures/' + book_picture
+
+        IC.compress_image(input_path, output_path)
 
         try:
             dt = datetime.datetime.now()
@@ -232,7 +241,7 @@ class FDataBase:
             return res
 
         except sqlite3.Error as e:
-            print("Ошибка получения данных из БД " + str(e))
+            print("Ошибка получения данных из БД \n" + str(e))
 
         return False
 
@@ -246,6 +255,6 @@ class FDataBase:
 
             return res
         except sqlite3.Error as e:
-            print("Ошибка получения данных из БД "+str(e))
+            print("Ошибка получения данных из БД \n"+str(e))
 
         return False

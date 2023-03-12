@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
     <script src="https://kit.fontawesome.com/ff961d70d9.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
     <link rel="stylesheet" href ="/static/styles.css" type="text/css" >
     
     {% block title -%}
@@ -17,52 +20,70 @@
 </head>
 
 <body>
-    {% if auth_name == 'Профиль' %}
-    <div class="login">
-        <a href="{{auth_link}}"><i class="fa fa-user" aria-hidden="true"></i> {{auth_name}}</a>
-    </div>
-    {% elif auth_name == 'Авторизация' %}
-    <div class="login">
-        <a href="{{auth_link}}">{{auth_name}}</a>
-    </div>    
-    {% else %}
-    
-    {% endif %}
+    <div class="search_profile">
 
-    <div class="wrapper">
+        <input name="global_search_input" placeholder="Поиск" type="text" id = "elastic">
+
+        <input class="global_search_button" type="submit" value="поиск"/>
+
+        {% if auth_name == 'Профиль' %}
+            <a class='login' href="{{auth_link}}"><i class="fa fa-user" aria-hidden="true"></i> {{auth_name}}</a>
+
+        {% elif auth_name == 'Авторизация' %}
+            <a class='login' href="{{auth_link}}">{{auth_name}}</a>
+        {% endif %}
+
+            <ul class="elastic">
+                {% for i in books %}
+                    <li><a class="search_text" href="/book_card?edit={{i.id}}">{{i.btitle}} - <b>{{i.author}}</a></b></li>
+
+                {% endfor %}
+            </ul>
+
+    </div>
+
+    <script src="/static/base.js"></script>
+
+    <div class="wrapper"> <!-- Меню -->
         {% block content -%}
 
         <header class="header">
-            <div class="container">
-                <div class="header_body">
+            <div class="header_body">
 
-                    <div class="header_burger">
-                        <span></span>
-                    </div>
-                    <nav class="header_menu">
-                            {%- block menu_main -%}
-                        <ul class="header_list" >
-                            {% for m in menu %}
-                            <li><a href="{{m.url}}" class="header_link">{{m.title}}</a></li>
-                            {% endfor %}
-                        </ul>
-                            {% endblock menu_main -%}
-                    </nav>
-                </div>
+                <nav class="header_menu">
+                        {%- block menu_main -%}
+                    <ul class="header_list" >
+                        {% for m in menu %}
+                        <li><a href="{{m.url}}" class="header_link">{{m.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                        {% endblock menu_main -%}
+                </nav>
             </div>
         </header>
 
     </div>
-    <div class="clear"></div> 
-    
-    <div class="content">
-        <div class="container">
-                {% if title -%}
-            <h1 class="title">{{title}}</h1>
-                {% endif %}
 
-                {% endblock -%}
+    <!-- Админ-панель -->
+    {% if current_user.get_role() == 'admin' %}
+        <div class="header_body">
+            <nav class="header_menu">
+                <ul class="admin-ul">
+                    <li class="admin-li"><a href="newbook">Добавить</a></li>
+                    <li class="admin-li"><a href="/booklist">Список книг</a></li>
+                </ul>
+            </nav>
         </div>
+    {% endif %}
+
+    <div class="content">
+
+        {% if title -%}
+            <h1 class="title">{{title}}</h1>
+        {% endif %}
+
+        {% endblock -%}
+
     </div>
 
 </body>

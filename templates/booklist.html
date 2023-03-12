@@ -5,13 +5,10 @@
 
 <link rel="stylesheet" href ="/static/booklist.css" type="text/css" >
 
-<script>
-    // Когда пользователь нажимает на <div>, открыть popup
-    function myFunction(id) {
-        var popup = document.getElementById(id);
-        popup.classList.toggle("show");
-    }
-</script>
+
+<link rel="stylesheet" href="modal.css">
+<script src="/static/booklist.js"></script>
+
 
 <form action="/booklist" method="post">
     <div class="search">
@@ -45,12 +42,6 @@
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
         <td>
-            <form action="/book_card" method="GET">
-                <button class="btn-edit" name="edit" value='{{row["id"]}}'>✎</button>
-            </form>
-        </td>
-        <td>
-
             {% if row["id"] == qr %}
             <a href="{{link}}" download="">
                 <button class='QR'name="qr" value='{{row["id"]}}'>Скачать QR-код</button>
@@ -60,16 +51,21 @@
                 <button class='QR' name="qr" value='{{row["id"]}}'>Создать QR-код</button>
             </a>
             {% endif %}
-        </td>
-        
-        <td>
-            <div class="popup" onclick="myFunction('{{row[0]}}')"><button>✖</button>
-                <span class="popuptext" id="{{row['id']}}">Вы уверены что хотите удалить?
-                    <form action="/booklist" method="POST">
-                        <button>Нет</button>
-                        <button name="id" value='{{row["id"]}}'>Да</button>
+            <div class="edit-delete-buttons" style='display: inline-flex;'>
+                <div>
+                    <form action="/book_card" method="GET">
+                        <button class="btn-edit" name="edit" value='{{row["id"]}}'>✎</button>
                     </form>
-                </span>
+                </div>
+                <div class="popup" onclick="modal.show()"><button>✖</button>
+                    <span class="popuptext" id="{{row['id']}}">Вы уверены что хотите удалить?
+                        <form action="/booklist" method="POST">
+                            <button>Нет</button>
+                            <button name="id" value='{{row["id"]}}'>Да</button>
+                        </form>
+                    </span>
+                    {{row[0]}}
+                </div>
             </div>
         </td>
     </tr>
@@ -77,13 +73,11 @@
 </table>
 
 {% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}" style="text-align: center; margin: auto; font-size: 14pt;  color: rgb(213, 213, 213);
-background: rgb(167, 10, 10); border-radius: 10px; margin-bottom: 10px; width: 20%; margin-top: 20px;">
-    {{msg}}
-    <a href="/booklist" >Показать все</a>
-</div>
+    <div class="flash">
+        {{msg}}
+        <a href="/booklist" >Показать все</a>
+    </div>
+
 {% endfor %}
-
-
 
 {% endblock %}

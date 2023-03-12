@@ -26,25 +26,32 @@ a{
     text-decoration: underline;
     color: rgb(213, 213, 213);
 }
-a:hover{
-    color: rgb(167, 167, 167);
-}
+    a:hover{
+        color: rgb(167, 167, 167);
+    }
 .btn-search{
-    border-radius: 2px;
+    border-radius: 6px;
 }
-.btn-search:hover{
-    box-shadow: 0px 0px 3px black;
-}
+    .btn-search:hover{
+        box-shadow: 0px 0px 3px black;
+    }
+
 .btn-edit:hover, .popup:hover{
     box-shadow: 0px 0px 3px black;
 }
+
 .QR{
-    border-radius: 2px;
-    
+    border-radius: 2px; 
 }
-.QR:hover{
-    box-shadow: 0px 0px 3px black;
-}
+    .QR:hover{
+        box-shadow: 0px 0px 3px black;
+    }
+
+.edit-delete-buttons{
+    margin: auto;
+}    
+
+
 x-field{
 display:inline;
 position:relative;
@@ -54,3 +61,62 @@ position:absolute;
 padding:0 5px;
 right:0;
 }
+
+.flash{
+    text-align: center; 
+    margin: auto;
+    font-size: 14pt;  
+    color: rgb(213, 213, 213);
+    background: rgb(167, 10, 10); 
+    border-radius: 10px; 
+    margin-bottom: 10px; 
+    width: 20%; 
+    margin-top: 20px;
+}
+
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .popup .popuptext{
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+  
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+  }
+  
+  /* Анимация */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }

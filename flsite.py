@@ -1,6 +1,7 @@
 import os
 from time import sleep
 
+import json
 import sqlite3
 from flask import Flask, render_template, request, g, redirect, url_for, flash
 from werkzeug.utils import secure_filename
@@ -61,12 +62,15 @@ def get_db():
 
 # Соединение с бд и получение глобальной переменной #
 dbase = None
+books = None
 @app.before_request
 def before_request():
     """ Соединение с бд """
-    global dbase 
+    global dbase
+    global book_list
     db = get_db()
     dbase = FDataBase(db)
+    book_list = dbase.booklist_function()
 
 @app.teardown_appcontext
 def closed_db(error):
@@ -80,12 +84,13 @@ def index():
     return redirect(url_for('recommended'))
 #  Страница рекомендации (по сути главная)  #
 @app.route('/recommended')
-def recommended():
+def recommended():  
+
     if current_user.is_authenticated:
-        return render_template('index.html' , auth_link = 'profile', auth_name='Профиль', 
+        return render_template('index.html',books = book_list, auth_link = 'profile', auth_name='Профиль', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
     else:
-        return render_template('index.html' , auth_link = 'auth', auth_name='Авторизация', 
+        return render_template('index.html',books = book_list, auth_link = 'auth', auth_name='Авторизация', 
             menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 #  Обработка ошибок  #
@@ -104,7 +109,7 @@ def about():
 @login_required
 def profile():
     res = dbase.get_user_data(current_user.get_id())
-    return render_template('profile.html', menu=dbase.getMenu(), res = res)
+    return render_template('profile.html', books = book_list, menu=dbase.getMenu(), res = res)
 
 # Выход из сессии
 @app.route('/logout')
@@ -163,8 +168,6 @@ def newbook():
     if current_user.get_role() != 'admin':
         return redirect('recommended')
     
-    books = dbase.booklist_function()
-
     if request.method == 'POST':
         if 'book_picture' not in request.files:
             flash('Обязательно добавьте картинку', category='error')
@@ -172,6 +175,7 @@ def newbook():
             file = request.files['book_picture']
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            sleep(1)
             dbase.newbook_function(
                 btitle=request.form['btitle'],
                 author=request.form['author'],
@@ -185,7 +189,7 @@ def newbook():
         'newbook.html',
         title='Newbook',
         inputs=dbase.get_placeholder_newbook(),
-        books=books
+        books=book_list
     )
 
 #  Страница со списком книг  #
@@ -210,17 +214,17 @@ def booklist():
 
         if results == None:
             flash('Книга не найдена', category='error')
-            return render_template('booklist.html', menu=dbase.getMenu())
-        return render_template('booklist.html', menu=dbase.getMenu(), restrictions=results)
+            return render_template('booklist.html',books = book_list, menu=dbase.getMenu())
+        return render_template('booklist.html',books = book_list, menu=dbase.getMenu(), restrictions=results)
 
     # Создание QR кода #
     elif request.method == 'GET' and post_req != None:
         link = dbase.QR_maker(post_req)
         print('Качнём:', link)
-        return render_template('booklist.html', menu=dbase.getMenu(),
+        return render_template('booklist.html',books = book_list, menu=dbase.getMenu(),
             restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
 
-    return render_template('booklist.html', menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+    return render_template('booklist.html',books = book_list, menu=dbase.getMenu(), restrictions=dbase.booklist_function())
 
 #  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])
@@ -228,8 +232,8 @@ def book_card():
     id = int(request.args.get('edit')) if request.args.get('edit') else None
 
     if id is None:
-        return render_template('book_card.html', menu=dbase.getMenu(), 
-                               title="Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
+        return render_template('book_card.html', books = book_list, menu=dbase.getMenu(), 
+            title="Ну и чё ты тут делаешь? Тыж не мог попасть на эту страницу")
 
     if current_user.is_authenticated:
         role = current_user.get_role()
@@ -243,7 +247,7 @@ def book_card():
         titlet = book_data[0][1]
 
         if request.method == 'GET':
-            return render_template('book_card.html', menu=dbase.getMenu(), id=id, author=author,
+            return render_template('book_card.html',books = book_list, menu=dbase.getMenu(), id=id, author=author,
                                    role=role, titlet=titlet, results=book_data)
 
         elif request.method == 'POST':
@@ -264,7 +268,7 @@ def book_card():
                 dbase.update_book_function(request.form['btitle'], request.form['author'], request.form['year'],
                                            request.form['number'], request.form['descript'], request.form['book_picture'], id)
 
-            return render_template('book_card.html', menu=dbase.getMenu(), id=id, author=author,
+            return render_template('book_card.html',books = book_list, menu=dbase.getMenu(), id=id, author=author,
                                    titlet=titlet, results=book_data)
 
     else:

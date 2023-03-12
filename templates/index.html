@@ -3,27 +3,8 @@
 {% block content %}
 {{ super() }}
 
-<style>
-    table{
-        margin-bottom: 5px; 
-        font-size: 14pt;
-        table-layout: fixed;        
-    }
-    .header{
-        font-weight:700;
-    }
-    .table_text{
-        margin-left: 10px;
-    }
-    .view-button{
-        float: right; 
-        margin-right: 10px; 
-        text-decoration: none;
-    }
-</style>
+<link rel="stylesheet" href="/static/index.css" type="text/css">
 
-<div><a href="newbook">Добавить</a></div>
-<div><a href="/booklist">Список книг</a></div>
 
 {% for row in restrictions %}
 

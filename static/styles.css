@@ -4,8 +4,8 @@ html, body{
 }
 
 .content{
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 .image{
@@ -14,7 +14,7 @@ html, body{
 
 .header_body {
   list-style: none;
-  margin: 8px 0 5px;
+  margin: 8px 0 10px;
   padding: 25px 0 5px;
   text-align: center;
   background: white;
@@ -71,22 +71,79 @@ html, body{
   .image{
     width: 150px;
   }
+  .content{
+    margin-left: 0%;
+    margin-right: 0%;
+  }
+}
+@media (width <= 1200px){
+  .content{
+    margin-left: 3%;
+    margin-right: 3%;
+  }
 }
 
-.login{
-    text-align: right;
-    margin-right: 10px;
-    font-size: 18pt;
+.search_profile{
+  display: inline;
+  margin: auto;
+  margin-bottom: 10px;
 }
-.login a{
-  text-decoration: none;
-  color: rgb(135, 135, 135);
-}
+  #elastic{
+    display: inline;
 
-.login a:hover{
-    color: #ff9b5e ;
-}
+  }
 
+  .elastic li{
+    transition: all ease 500ms;
+    display: none;
+  }
+    .elastic li.hide {
+      display: block;
+    }
+  .search_text{
+    background-color: aliceblue;
+    margin: auto;
+    color: #000;
+    text-decoration: none;
+  }
+  .search_text:hover{
+    color: #232323;
+
+  }
+
+  .login{
+      float: right;
+      text-align: right;
+      margin-right: 10px;
+      font-size: 18pt;
+      text-decoration: none;
+      color: rgb(135, 135, 135);    
+  }
+    .login:hover{
+        color: #ff9b5e ;
+    }
+  
+  .global_search_input{
+    margin-left: 50%;
+
+  }
+  .global_search_button{
+    margin: auto;
+  }
+  
+  .admin-ul{
+    text-align: center;
+  }
+
+  .admin-li{
+    background-color: white;
+    display: inline-block;
+  }
+  .admin-li a{
+    font-size: 20px;
+    text-decoration: none;
+    color: #606060;
+  }
 
 .Books_Table{
   display: flex;
@@ -95,12 +152,9 @@ html, body{
   position: relative;
   list-style: none;
 }
-.books{
-  list-style: none;
-}
-
-
-
+  .books{
+    list-style: none;
+  }
 
 .Test{
   font-size: 16pt;
@@ -111,54 +165,4 @@ html, body{
 
 .title{
   text-align: center;
-
-}
-
-/*   Всплывающее окно   */
-
-.popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-.popup .popuptext{
-  visibility: hidden;
-  width: 160px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -80px;
-}
-
-.popup .popuptext::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #555 transparent transparent transparent;
-}
-.popup .show {
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  animation: fadeIn 1s
-}
-
-/* Анимация */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
 }
