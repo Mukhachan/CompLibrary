@@ -66,8 +66,8 @@
 
     <!-- Админ-панель -->
     {% if current_user.get_role() == 'admin' %}
-        <div class="header_body">
-            <nav class="header_menu">
+        <div class="header_body_admin">
+            <nav class="header_menu_admin">
                 <ul class="admin-ul">
                     <li class="admin-li"><a href="newbook">Добавить</a></li>
                     <li class="admin-li"><a href="/booklist">Список книг</a></li>

@@ -81,10 +81,9 @@ class FDataBase:
            Также сжимает изображение, для этого используется отдельный класс ImageCompressor
         '''
 
-        input_path = '/static/pictures/' + book_picture
-        output_path = '/static/pictures/' + book_picture
+        image_path = 'static/pictures/' + book_picture
 
-        IC.compress_image(input_path, output_path)
+        IC.compress_RLE(image_path)
 
         try:
             dt = datetime.datetime.now()

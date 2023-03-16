@@ -26,20 +26,20 @@
     {% if id %}
     <table border="1px" style="margin: auto;">
     <tr>
-        <td>
+        <td> <!-- Прогружаем картинку -->
             <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
         </td>
-        <div class="psevdo_div">
+        <div class="psevdo_div"> <!-- создаём поле для описания -->
             <td style="width: 55%;">
                 <textarea class="textarea" name="descript" >{{row['descript']}}</textarea>
             </td>
         </div>
         <td>
         <table style="margin: auto;">
-            <tr>
+            <tr> <!-- Поле с количеством экземпляров -->
                 <td class="numbers"><input class='number' type="number" name="number" value="{{row['number']}}"></td>
             </tr>
-            <tr>
+            <tr> <!-- Поле с годом выпуска произведения -->
                 <td class="numbers"><input class='year' type="number" name="year" value="{{row['year']}}"></td>
             </tr>
         </table>
@@ -77,8 +77,7 @@
 <table>
         <tr>
             <td>
-                <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>
-                
+                <img class='image' src="/static/pictures/{{row['book_picture']}}" alt="{{row['picture_name']}}" height='390px'>            
             </td>
             <td style="float:left; width: 40%;">
                 <div>{{row['descript']}}</div>

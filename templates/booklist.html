@@ -42,9 +42,11 @@
         <td>{{row["descript"]}}</td>
         <td>{{row["dt_string"]}}</td>
         <td>
+        
             {% if row["id"] == qr %}
             <a href="{{link}}" download="">
                 <button class='QR'name="qr" value='{{row["id"]}}'>Скачать QR-код</button>
+                <a class ="print-doc" href="javascript:(print());"><img src="static/pictures/book_{{row['id']}}.png" style="width: 50px;" alt="Распечатать">Распечатать</a>                
             </a>
             {% else %}
             <a href="/booklist?qr={{row['id']}}">

@@ -1,7 +1,6 @@
 import os
 from time import sleep
 
-import json
 import sqlite3
 from flask import Flask, render_template, request, g, redirect, url_for, flash
 from werkzeug.utils import secure_filename
@@ -88,10 +87,10 @@ def recommended():
 
     if current_user.is_authenticated:
         return render_template('index.html',books = book_list, auth_link = 'profile', auth_name='Профиль', 
-            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+            menu=dbase.getMenu(), restrictions=book_list)
     else:
         return render_template('index.html',books = book_list, auth_link = 'auth', auth_name='Авторизация', 
-            menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+            menu=dbase.getMenu(), restrictions=book_list)
 
 #  Обработка ошибок  #
 @app.errorhandler(404)
@@ -222,9 +221,9 @@ def booklist():
         link = dbase.QR_maker(post_req)
         print('Качнём:', link)
         return render_template('booklist.html',books = book_list, menu=dbase.getMenu(),
-            restrictions=dbase.booklist_function(), link=link, qr=int(post_req))
+            restrictions=book_list, link=link, qr=int(post_req))
 
-    return render_template('booklist.html',books = book_list, menu=dbase.getMenu(), restrictions=dbase.booklist_function())
+    return render_template('booklist.html',books = book_list, menu=dbase.getMenu(), restrictions=book_list)
 
 #  Карточка книги  #
 @app.route('/book_card', methods=['GET','POST'])

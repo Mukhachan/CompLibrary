@@ -17,7 +17,7 @@ class UserLogin:
         return False
 
     def get_role(self):
-        return str(self.__user['role'])
+        return self.__user['role']
 
     def get_id(self):
         return str(self.__user['id'])
