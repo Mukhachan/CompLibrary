@@ -76,11 +76,11 @@ class FDataBase:
             print('Произошла какая-то ошибка. Наши полномочия всё')
             print(e)
 
-    def newbook_function(self, btitle, author, year, number, descript, book_picture):
+    def newbook_function(self, isbn, btitle, author, year, number, descript, book_picture):
         '''Принимает характеристики книги и создаёт новую запись в бд
            Также сжимает изображение, для этого используется отдельный класс ImageCompressor
         '''
-
+        
         image_path = 'static/pictures/' + book_picture
 
         IC.compress_RLE(image_path)
@@ -88,8 +88,8 @@ class FDataBase:
         try:
             dt = datetime.datetime.now()
             dt_string = dt.strftime("%d/%m/%Y %H:%M:%S")
-            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)",
-                               (btitle, author, year, number, descript, dt_string, book_picture))
+            self.__cur.execute("insert into books VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)",
+                               (isbn, btitle, author, year, number, descript, dt_string, book_picture))
             self.__db.commit()
 
         except sqlite3.Error as e:

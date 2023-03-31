@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS mainmenu (
 
 CREATE TABLE IF NOT EXISTS books (
     id integer PRIMARY KEY AUTOINCREMENT,
+    isbn integer NULL,
     title text NOT NULL,
     author text NOT NULL,
     year integer NOT NULL,

@@ -176,6 +176,7 @@ def newbook():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             sleep(1)
             dbase.newbook_function(
+                isbn = request.form['isbn'],
                 btitle=request.form['btitle'],
                 author=request.form['author'],
                 year=request.form['year'],
